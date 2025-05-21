@@ -19,9 +19,40 @@ step2:
     mov ss, ax
     mov sp, 0x7c00
     sti
+    
+    ; Establecer modo gráfico 320x200 (modo 13h)
+    mov ax, 0x0013
+    int 0x10
 
+    ; Dibujar píxeles de colores
+    mov ax, 0xA000
+    mov es, ax
+
+    ; Píxel 1
+    mov di, 0
+    mov al, 4
+    stosb
+
+    ; Píxel 2
+    mov di, 1
+    mov al, 2
+    stosb
+
+    ; Píxel 3
+    mov di, 2
+    mov al, 1
+    stosb
+    
+    mov di, 3
+    mov al, 2
+    stosb
+    
+    mov ax, 0x0003
+    int 0x10
+    
     ; Imprimir mensaje
     mov si, imprimir
+        
 .print_char:
     lodsb
     cmp al, 0
@@ -38,7 +69,7 @@ step2:
     or eax, 0x1
     mov cr0, eax
     jmp CODE_SEG:load32
-
+    
 gdt_start:
 gdt_null:
     dd 0x0
@@ -66,7 +97,7 @@ gdt_descriptor:
     dw gdt_end - gdt_start - 1
     dd gdt_start
 
-imprimir db 'BIENVENIDO A HuguiniOS', 0x0D, 0x0A, 0x0D, 0x0A, 0x0D, 0x0A, 0x0D, 0x0A, 0x0D, 0x0A, 'Creador: Huguini | Hugo', 0x0D, 0x0A, 'Hecho totalmente en ensamblador.', 0x0D, 0x0A, 0x0D, 0x0A, 0x0D, 0x0A, 0x0D, 0x0A, '................', 0x0D, 0x0A, 'HuguiniOS', 0x0D, 0x0A, '................',  0
+imprimir db 'BIENVENIDO A HuguiniOS', 0x0D, 0x0A, 0x0D, 0x0A, 'Creador: Huguini | Hugo', 0x0D, 0x0A, 'Hecho en ensamblador', 0x0D, 0x0A, 0x0D, 0x0A, 0x0D, '................', 0x0D, 0x0A, 'HuguiniOS', 0x0D, 0x0A, '................', 0x0D, 0x0A, 0x0D, 0x0A, '................', 0x0D, 0x0A, 'HuguiniHacker+', 0x0D, 0x0A, '................', 0x0D, 0x0A, 0x0D, 0x0A, '................', 0x0D, 'Creado teniendo 12 de edad', 0x0D, 0x0A, '................', 0
 
 [BITS 32]
 load32:
@@ -122,5 +153,5 @@ ata_lba_read:
     loop .next_sector
     ret
 
-times 510 - ($ - $$) db 0
+times (510 - ($ - $$)) db 0
 dw 0xAA55
