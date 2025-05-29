@@ -2,18 +2,34 @@
 #include "config.h"
 #include "../kernel.h"
 #include "memory/memory.h"
+#include "io/io.h"
+
 struct idt_desc idt_descriptors[HUGUINIOS_TOTAL_INTERRUMPTS];
 struct idtr_desc idtr_descriptor;
 
-extern void idt_load(struct idtr_desc* ptr);
+void idt_zero();
+void idt_set(int interrupt_no, void* address);
+void int21h_handler();
+void no_interrumpt_handler();
 
-void idt_zero()
-{
+extern void idt_load(struct idtr_desc* ptr);
+extern void int21h();
+extern void no_interrumpt();
+
+void int21h_handler() {
+	imprimir_texto("Tecla del teclado presionada", 10);
+	outb(0x20, 0x20);
+}
+
+void no_interrumpt_handler() {
+	outb(0x20, 0x20);
+}
+
+void idt_zero() {
     imprimir_texto("Error de división por cero\n", 0);
 }
 
-void idt_set(int interrupt_no, void* address)
-{
+void idt_set(int interrupt_no, void* address) {
     struct idt_desc* desc = &idt_descriptors[interrupt_no];
     desc->offset_1 = (uint32_t) address & 0x0000ffff;
     desc->selector = KERNEL_CODE_SELECTOR;
@@ -22,13 +38,18 @@ void idt_set(int interrupt_no, void* address)
     desc->offset_2 = (uint32_t) address >> 16;
 }
 
-void idt_init()
-{
+void idt_init() {
     memset(idt_descriptors, 0, sizeof(idt_descriptors));
-    idtr_descriptor.limit = sizeof(idt_descriptors) -1;
-    idtr_descriptor.base = (uint32_t) idt_descriptors;
-
-    idt_set(0, idt_zero);
-
-    idt_load(&idtr_descriptor);
+	idtr_descriptor.limit = sizeof(idt_descriptors) - 1;
+	idtr_descriptor.base = (uint32_t) idt_descriptors;
+	
+	for(int i = 0; i < HUGUINIOS_TOTAL_INTERRUMPTS; i++) {
+		idt_set(i, no_interrumpt);
+	}
+	
+	idt_set(0, idt_zero);
+	
+	idt_set(0x21, int21h);
+	
+	idt_load(&idtr_descriptor);
 }

@@ -23,6 +23,14 @@ _start:
 	
 	call kernel_main
 	
+	mov al, 00010001b
+	out 0x20, al
+	
+	mov al, 00000001b
+	out 0x21, al
+	
+	sti
+	
 	jmp $
 	
 times 512-($-$$) db 0

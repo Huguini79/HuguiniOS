@@ -84,5 +84,11 @@ void kernel_main()
     idt_init();
     
     outb(0x60, 0xff);
-        
+    
+    
+       
+    while(1) {
+		__asm__("hlt");
+	}
+       
 }
