@@ -1,5 +1,6 @@
 #include "kernel.h"
 #include "idt/idt.h"
+#include "io/io.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -82,6 +83,6 @@ void kernel_main()
     
     idt_init();
     
-    // while(1) {}
-    
+    outb(0x60, 0xff);
+        
 }
