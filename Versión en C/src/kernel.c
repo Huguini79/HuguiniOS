@@ -1,4 +1,5 @@
 #include "kernel.h"
+#include "idt/idt.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -68,13 +69,19 @@ void kernel_main()
     const char mensaje[] = "BIENVENIDO A HuguiniOS";
     const char mensaje2[] = "Te estoy hablando desde C :)";
     const char mensaje3[] = "Sistema operativo hecho en Ensamblador y C por Huguini";
-
+	const char mensaje4[] = "................";
+	const char mensaje5[] = "....HuguiniOS...";
+	const char mensaje6[] = "................";
 	
     imprimir_texto(mensaje, 0);
     imprimir_texto(mensaje2, 2);
     imprimir_texto(mensaje3, 4);
+    imprimir_texto(mensaje4, 6);
+    imprimir_texto(mensaje5, 7);
+    imprimir_texto(mensaje6, 8);
     
-        
+    idt_init();
+    
     // while(1) {}
     
 }
