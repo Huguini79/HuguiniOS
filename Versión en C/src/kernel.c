@@ -9,8 +9,6 @@ uint16_t* video_mem;
 uint16_t terminal_row;
 uint16_t terminal_col;
 
-int i = 0;
-
 uint16_t terminal_make_char(char c, char colour)
 {
     return (colour << 8) | c;
@@ -55,12 +53,13 @@ void terminal_initialize()
     }   
 }
 
-void imprimir_texto(const char* texto, int posicion) {
-	for (const char* a = texto; *a != '\0'; a++) {
-		i++;
-		terminal_putchar(i, posicion, *a, 0x0F);
-	}
+void imprimir_texto(const char* texto, int fila) {
+    terminal_row = fila;  // Establece la fila deseada
+    terminal_col = 0;     // Reinicia la columna a 0
 
+    for (const char* a = texto; *a != '\0'; a++) {
+        terminal_writechar(*a, 0x0F);
+    }
 }
 
 void kernel_main()
@@ -70,9 +69,11 @@ void kernel_main()
     const char mensaje2[] = "Te estoy hablando desde C :)";
     const char mensaje3[] = "Sistema operativo hecho en Ensamblador y C por Huguini";
 
+	
     imprimir_texto(mensaje, 0);
     imprimir_texto(mensaje2, 2);
     imprimir_texto(mensaje3, 4);
+    
         
     // while(1) {}
     
