@@ -1,6 +1,7 @@
 #include "kernel.h"
 #include "idt/idt.h"
 #include "io/io.h"
+#include "memory/heap/kheap.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -64,31 +65,49 @@ void imprimir_texto(const char* texto, int fila) {
     }
 }
 
-void kernel_main()
-{
+void kernel_main() {
     terminal_initialize();
     const char mensaje[] = "BIENVENIDO A HuguiniOS";
     const char mensaje2[] = "Te estoy hablando desde C :)";
     const char mensaje3[] = "Sistema operativo hecho en Ensamblador y C por Huguini";
-	const char mensaje4[] = "................";
-	const char mensaje5[] = "....HuguiniOS...";
-	const char mensaje6[] = "................";
-	
+	const char mensaje4[] = "..................................................";
+	const char mensaje5[] = "...................HuguiniOS......................";
+	const char mensaje6[] = "..................................................";
+			
     imprimir_texto(mensaje, 0);
     imprimir_texto(mensaje2, 2);
-    imprimir_texto(mensaje3, 4);
+    imprimir_texto(mensaje3, 3);
+    imprimir_texto(mensaje4, 5);
     imprimir_texto(mensaje4, 6);
-    imprimir_texto(mensaje5, 7);
-    imprimir_texto(mensaje6, 8);
+    imprimir_texto(mensaje4, 7);
+    imprimir_texto(mensaje4, 8);
+    imprimir_texto(mensaje5, 9);
+    imprimir_texto(mensaje5, 10);
+    imprimir_texto(mensaje5, 11);
+    imprimir_texto(mensaje5, 12);
+    imprimir_texto(mensaje5, 13);
+    imprimir_texto(mensaje5, 14);
+    imprimir_texto(mensaje6, 15);
+    imprimir_texto(mensaje6, 16);
+    imprimir_texto(mensaje6, 17);
+    imprimir_texto(mensaje6, 18);
+    imprimir_texto(mensaje6, 19);
+    imprimir_texto(mensaje6, 20);
+    imprimir_texto(mensaje6, 21);
+    imprimir_texto(mensaje6, 22);
+    imprimir_texto(mensaje6, 23);
+    imprimir_texto(mensaje6, 24);
     
-    idt_init();
+    idt_init();   
     
-    outb(0x60, 0xff);
-    
-    
+    kheap_init();
+        
+    outb(0x60, 0xff);  
+       
        
     while(1) {
 		__asm__("hlt");
 	}
+
        
 }
