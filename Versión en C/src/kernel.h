@@ -2,7 +2,7 @@
 #define KERNEL_H
 
 #define VGA_WIDTH 80
-#define VGA_HEIGHT 20
+#define VGA_HEIGHT 25
 
 void imprimir_texto(const char* str, int posicion);
 void kernel_main();

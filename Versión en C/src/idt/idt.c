@@ -17,7 +17,7 @@ extern void int21h();
 extern void no_interrumpt();
 
 void int21h_handler() {
-	imprimir_texto("Tecla del teclado presionada", 10);
+	imprimir_texto("Tecla del teclado presionada", 21);
 	outb(0x20, 0x20);
 }
 

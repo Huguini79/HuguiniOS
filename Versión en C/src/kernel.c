@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 #define VGA_WIDTH 80
-#define VGA_HEIGHT 20
+#define VGA_HEIGHT 25
 
 uint16_t* video_mem;
 uint16_t terminal_row;
@@ -57,8 +57,8 @@ void terminal_initialize()
 }
 
 void imprimir_texto(const char* texto, int fila) {
-    terminal_row = fila;  // Establece la fila deseada
-    terminal_col = 0;     // Reinicia la columna a 0
+    terminal_row = fila;
+    terminal_col = 0;
 
     for (const char* a = texto; *a != '\0'; a++) {
         terminal_writechar(*a, 0x0F);
@@ -67,12 +67,15 @@ void imprimir_texto(const char* texto, int fila) {
 
 void kernel_main() {
     terminal_initialize();
-    const char mensaje[] = "BIENVENIDO A HuguiniOS";
-    const char mensaje2[] = "Te estoy hablando desde C :)";
-    const char mensaje3[] = "Sistema operativo hecho en Ensamblador y C por Huguini";
+			
+	const char mensaje[] = "BIENVENIDO A HuguiniOS";
+	const char mensaje2[] = "Te estoy hablando desde C :)";
+	const char mensaje3[] = "Sistema operativo hecho en Ensamblador y C por Huguini";
 	const char mensaje4[] = "..................................................";
 	const char mensaje5[] = "...................HuguiniOS......................";
 	const char mensaje6[] = "..................................................";
+	const char mensaje7[] = "El disco se ha cargado correctamente.";
+
 			
     imprimir_texto(mensaje, 0);
     imprimir_texto(mensaje2, 2);
@@ -91,17 +94,16 @@ void kernel_main() {
     imprimir_texto(mensaje6, 16);
     imprimir_texto(mensaje6, 17);
     imprimir_texto(mensaje6, 18);
-    imprimir_texto(mensaje6, 19);
-    imprimir_texto(mensaje6, 20);
-    imprimir_texto(mensaje6, 21);
-    imprimir_texto(mensaje6, 22);
-    imprimir_texto(mensaje6, 23);
-    imprimir_texto(mensaje6, 24);
+        
+    char buf[512];
+    disk_read_sector(0, 1, buf);
+    
+    imprimir_texto(mensaje7, 20);
     
     idt_init();
-
+    
     outb(0x21, 0xFF);
-	outb(0xA1, 0xFF); 
+	outb(0xA1, 0xFF);
 
     enable_interrumpts();
     
@@ -109,10 +111,10 @@ void kernel_main() {
 
     outb(0x60, 0xff); 
                
-       
     while(1) {
-		__asm__("hlt");
-	}
+        __asm__("hlt");
+        
+    }
 
        
 }
