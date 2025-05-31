@@ -29,8 +29,6 @@ _start:
 	mov al, 00000001b
 	out 0x21, al
 	
-	sti
-	
 	jmp $
 	
 times 512-($-$$) db 0

@@ -98,12 +98,17 @@ void kernel_main() {
     imprimir_texto(mensaje6, 23);
     imprimir_texto(mensaje6, 24);
     
-    idt_init();   
+    idt_init();
+
+    outb(0x21, 0xFF);
+	outb(0xA1, 0xFF); 
+
+    enable_interrumpts();
     
     kheap_init();
-        
-    outb(0x60, 0xff);  
-       
+
+    outb(0x60, 0xff); 
+               
        
     while(1) {
 		__asm__("hlt");
