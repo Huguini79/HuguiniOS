@@ -4,6 +4,7 @@
 #include "memory/heap/kheap.h"
 #include "string/string.h"
 #include "disk/disk.h"
+#include "memory/paging/paging.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -67,6 +68,8 @@ void imprimir_texto(const char* texto, int fila) {
     }
 }
 
+static struct paging_4gb_chunk* kernel_chunk = 0;
+
 void kernel_main() {
     terminal_initialize();
 			
@@ -79,6 +82,12 @@ void kernel_main() {
 	const char mensaje7[] = "El disco se ha cargado correctamente.";
 
     idt_init();
+
+	kernel_chunk = paging_new_4gb(PAGING_IS_WRITEABLE | PAGING_IS_PRESENT | PAGING_ACCESS_FROM_ALL);
+	
+	paging_switch(paging_4gb_chunk_get_directory(kernel_chunk));
+	
+	enable_paging();
     
     outb(0x21, 0xFF);
 	outb(0xA1, 0xFF);
