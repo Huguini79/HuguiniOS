@@ -5,6 +5,7 @@
 #include "string/string.h"
 #include "disk/disk.h"
 #include "memory/paging/paging.h"
+#include "fs/pparser.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -80,6 +81,8 @@ void kernel_main() {
 	const char mensaje5[] = "...................HuguiniOS......................";
 	const char mensaje6[] = "..................................................";
 	const char mensaje7[] = "El disco se ha cargado correctamente.";
+	const char mensaje8[] = "No se ha podido encontrar el archivo hola.txt, verifica que esté el archivo junto a tu os.bin o HuguiniOS.img";
+	const char mensaje9[] = "El archivo hola.txt ha sido encontrado exitosamente.";
 
     idt_init();
 
@@ -120,6 +123,12 @@ void kernel_main() {
     disk_read_sector(0, 1, buf);
     
     imprimir_texto(mensaje7, 20);
+    
+    struct path_root* root_path = pathparser_parse("0:/hola.txt", NULL);
+        
+    if(root_path) {
+	
+	}
     
                
     while(1) {

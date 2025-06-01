@@ -1,4 +1,4 @@
-FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt/idt.asm.o ./build/idt/idt.o ./build/memory/memory.o ./build/io/io.asm.o ./build/memory/heap/heap.o ./build/memory/heap/kheap.o ./build/disk/disk.o ./build/string/string.o ./build/memory/paging/paging.o ./build/memory/paging/paging.asm.o
+FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt/idt.asm.o ./build/idt/idt.o ./build/memory/memory.o ./build/io/io.asm.o ./build/memory/heap/heap.o ./build/memory/heap/kheap.o ./build/disk/disk.o ./build/string/string.o ./build/memory/paging/paging.o ./build/memory/paging/paging.asm.o ./build/fs/pparser.o
 INCLUDES = -I./src
 FLAGS = -g -ffreestanding -fno-pic -fno-pie -no-pie \
         -falign-jumps -falign-functions -falign-labels \
@@ -7,7 +7,7 @@ FLAGS = -g -ffreestanding -fno-pic -fno-pie -no-pie \
         -Wno-unused-parameter -nostdlib -nostartfiles \
         -nodefaultlibs -Wall -O2 -Iinc
 
-DIRS = ./build ./bin ./build/io ./build/idt ./build/memory ./build/memory/heap ./build/disk ./build/string ./build/memory/paging
+DIRS = ./build ./bin ./build/io ./build/idt ./build/memory ./build/memory/heap ./build/disk ./build/string ./build/memory/paging ./build/fs
 $(shell mkdir -p $(DIRS))
 
 all: ./bin/boot.bin ./bin/kernel.bin
@@ -62,6 +62,9 @@ all: ./bin/boot.bin ./bin/kernel.bin
 	
 ./build/string/string.o: ./src/string/string.c
 	i686-linux-gnu-gcc $(INCLUDES) -I ./src/string $(FLAGS) -std=gnu99 -c ./src/string/string.c -o ./build/string/string.o
+	
+./build/fs/pparser.o: ./src/fs/pparser.c
+	i686-linux-gnu-gcc $(INCLUDES) -I./src/fs $(FLAGS) -std=gnu99 -c ./src/fs/pparser.c -o ./build/fs/pparser.o
 	
  clean:
 	rm -rf ./bin/boot.bin
