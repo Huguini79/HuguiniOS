@@ -3,6 +3,7 @@
 #include "io/io.h"
 #include "memory/heap/kheap.h"
 #include "string/string.h"
+#include "disk/disk.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -77,6 +78,16 @@ void kernel_main() {
 	const char mensaje6[] = "..................................................";
 	const char mensaje7[] = "El disco se ha cargado correctamente.";
 
+    idt_init();
+    
+    outb(0x21, 0xFF);
+	outb(0xA1, 0xFF);
+
+    enable_interrumpts();
+    
+    kheap_init();
+
+    outb(0x60, 0xff); 
 			
     imprimir_texto(mensaje, 0);
     imprimir_texto(mensaje2, 2);
@@ -101,16 +112,6 @@ void kernel_main() {
     
     imprimir_texto(mensaje7, 20);
     
-    idt_init();
-    
-    outb(0x21, 0xFF);
-	outb(0xA1, 0xFF);
-
-    enable_interrumpts();
-    
-    kheap_init();
-
-    outb(0x60, 0xff); 
                
     while(1) {
         __asm__("hlt");
