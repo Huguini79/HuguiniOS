@@ -4,7 +4,7 @@ This operating system was made by Huguini79 in 2 months, this operating system i
 
 The second version of the operating system is also made in Assembly and shows GUI(a button), it's also a bootloader in protected mode. It's on V2HuguiniOS folder.
 
-But the best version of the operating system(including IDT interrumptions, disk driver, paging and memory heap), it's wrote in C and Assembly, and this version is constantly being updated.
+But the best version of the operating system(including IDT interrumptions, disk driver, paging and memory heap), it's wrote in C and Assembly, and this version is constantly being updated. It's on Versión en C folder.
 
 In all the versions, the bin folder is where the compiled version of the operating system resides(you can emulate with QEMU the os.bin or HuguiniOS.img file), the build folder is where the object files of the HuguiniOS source code resides, and the src folder is where the HuguiniOS source code resides, you can see the files in Assembly or in C.
 
