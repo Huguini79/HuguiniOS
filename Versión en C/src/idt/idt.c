@@ -7,6 +7,9 @@
 struct idt_desc idt_descriptors[HUGUINIOS_TOTAL_INTERRUMPTS];
 struct idtr_desc idtr_descriptor;
 
+const char mensaje[] = "Tecla del teclado presionada";
+const char mensaje2[] = "Error de división por cero";
+
 void idt_zero();
 void idt_set(int interrupt_no, void* address);
 void int21h_handler();
@@ -17,7 +20,7 @@ extern void int21h();
 extern void no_interrumpt();
 
 void int21h_handler() {
-	imprimir_texto("Tecla del teclado presionada", 21);
+	imprimir_texto(mensaje, 22);
 	outb(0x20, 0x20);
 }
 
@@ -26,7 +29,7 @@ void no_interrumpt_handler() {
 }
 
 void idt_zero() {
-    imprimir_texto("Error de división por cero\n", 0);
+    imprimir_texto(mensaje2, 23);
 }
 
 void idt_set(int interrupt_no, void* address) {
