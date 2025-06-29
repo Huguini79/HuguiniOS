@@ -4,7 +4,7 @@
 #include "memory/memory.h"
 #include "io/io.h"
 
-struct idt_desc idt_descriptors[HUGUINIOS_TOTAL_INTERRUMPTS];
+struct idt_desc idt_descriptors[HUGUINIOS_TOTAL_INTERRUPTS];
 struct idtr_desc idtr_descriptor;
 
 const char mensaje[] = "Tecla del teclado presionada";
@@ -46,7 +46,7 @@ void idt_init() {
 	idtr_descriptor.limit = sizeof(idt_descriptors) - 1;
 	idtr_descriptor.base = (uint32_t) idt_descriptors;
 	
-	for(int i = 0; i < HUGUINIOS_TOTAL_INTERRUMPTS; i++) {
+	for(int i = 0; i < HUGUINIOS_TOTAL_INTERRUPTS; i++) {
 		idt_set(i, no_interrumpt);
 	}
 	
