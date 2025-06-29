@@ -3,6 +3,7 @@
 #include "io/io.h"
 #include "config.h"
 #include "gdt/gdt.h"
+#include "fs/file.h"
 #include "memory/heap/kheap.h"
 #include "string/string.h"
 #include "disk/disk.h"
@@ -115,6 +116,8 @@ void kernel_main() {
 	outb(0xA1, 0xFF);
 
     enable_interrumpts();
+    
+    fs_init();
     
     kheap_init();
 

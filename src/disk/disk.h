@@ -8,6 +8,9 @@
 struct disk {
     int type;
     int sector_size;
+    int id;
+    int fs_private;
+    struct filesystem* filesystem;
 };
 
 int disk_read_block(struct disk* disk, int lba, int total, void* buf);
