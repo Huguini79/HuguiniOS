@@ -20,7 +20,7 @@ extern void int21h();
 extern void no_interrumpt();
 
 void int21h_handler() {
-	imprimir_texto(mensaje, 22);
+	imprimir_texto("TECLA PRESIONADA");
 	outb(0x20, 0x20);
 }
 
@@ -29,7 +29,7 @@ void no_interrumpt_handler() {
 }
 
 void idt_zero() {
-    imprimir_texto(mensaje2, 23);
+    imprimir_texto(mensaje2);
 }
 
 void idt_set(int interrupt_no, void* address) {

@@ -6,7 +6,7 @@
 
 #define HUGUINIOS_MAX_PATH 108
 
-void imprimir_texto(const char* str, int posicion);
+void imprimir_texto(const char* str);
 void kernel_main();
 
 #endif

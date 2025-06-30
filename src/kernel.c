@@ -10,6 +10,7 @@
 #include "task/tss.h"
 #include "task/process.h"
 #include "task/task.h"
+#include "string/string.h"
 #include "memory/paging/paging.h"
 #include "fs/pparser.h"
 #include "disk/streamer.h"
@@ -67,12 +68,11 @@ void terminal_initialize()
     }   
 }
 
-void imprimir_texto(const char* texto, int fila) {
-    terminal_row = fila;
-    terminal_col = 0;
-
-    for (const char* a = texto; *a != '\0'; a++) {
-        terminal_writechar(*a, 0x0F);
+void imprimir_texto(const char* str) {
+    size_t len = strlen(str);
+    for (int i = 0; i < len; i++)
+    {
+        terminal_writechar(str[i], 15);
     }
 }
 
@@ -92,15 +92,15 @@ struct gdt_structured gdt_structured[HUGUINIOS_TOTAL_GDT_SEGMENTS] = {
 void kernel_main() {
     terminal_initialize();
 			
-	const char mensaje[] = "BIENVENIDO A HuguiniOS";
-	const char mensaje2[] = "Te estoy hablando desde C :)";
-	const char mensaje3[] = "Sistema operativo hecho en Ensamblador y C por Huguini";
-	const char mensaje4[] = "..................................................";
-	const char mensaje5[] = "...................HuguiniOS......................";
-	const char mensaje6[] = "..................................................";
-	const char mensaje7[] = "El disco se ha cargado correctamente.";
-	const char mensaje8[] = "No se ha podido encontrar el archivo hola.txt, verifica que esté el archivo junto a tu os.bin o HuguiniOS.img";
-	const char mensaje9[] = "El archivo hola.txt ha sido encontrado exitosamente.";
+	const char mensaje[] = "BIENVENIDO A HuguiniOS\n\n";
+	const char mensaje2[] = "Te estoy hablando desde C :)\n";
+	const char mensaje3[] = "Sistema operativo hecho en Ensamblador y C por Huguini\n";
+	const char mensaje4[] = "..................................................\n";
+	const char mensaje5[] = "...................HuguiniOS......................\n";
+	const char mensaje6[] = "..................................................\n";
+	const char mensaje7[] = "\nEl disco se ha cargado correctamente.\n";
+	const char mensaje8[] = "No se ha podido encontrar el archivo hola.txt, verifica que esté el archivo junto a tu os.bin o HuguiniOS.img\n";
+	const char mensaje9[] = "El archivo hola.txt ha sido encontrado exitosamente.\n";
 
     idt_init();
 
@@ -121,28 +121,28 @@ void kernel_main() {
 
     outb(0x60, 0xff); 
 			
-    imprimir_texto(mensaje, 0);
-    imprimir_texto(mensaje2, 2);
-    imprimir_texto(mensaje3, 3);
-    imprimir_texto(mensaje4, 5);
-    imprimir_texto(mensaje4, 6);
-    imprimir_texto(mensaje4, 7);
-    imprimir_texto(mensaje4, 8);
-    imprimir_texto(mensaje5, 9);
-    imprimir_texto(mensaje5, 10);
-    imprimir_texto(mensaje5, 11);
-    imprimir_texto(mensaje5, 12);
-    imprimir_texto(mensaje5, 13);
-    imprimir_texto(mensaje5, 14);
-    imprimir_texto(mensaje6, 15);
-    imprimir_texto(mensaje6, 16);
-    imprimir_texto(mensaje6, 17);
-    imprimir_texto(mensaje6, 18);
+    imprimir_texto(mensaje);
+    imprimir_texto(mensaje2);
+    imprimir_texto(mensaje3);
+    imprimir_texto(mensaje4);
+    imprimir_texto(mensaje4);
+    imprimir_texto(mensaje4);
+    imprimir_texto(mensaje4);
+    imprimir_texto(mensaje5);
+    imprimir_texto(mensaje5);
+    imprimir_texto(mensaje5);
+    imprimir_texto(mensaje5);
+    imprimir_texto(mensaje5);
+    imprimir_texto(mensaje5);
+    imprimir_texto(mensaje6);
+    imprimir_texto(mensaje6);
+    imprimir_texto(mensaje6);
+    imprimir_texto(mensaje6);
         
     char buf[512];
     disk_read_sector(0, 1, buf);
     
-    imprimir_texto(mensaje7, 20);
+    imprimir_texto(mensaje7);
     
     struct disk_stream* stream = diskstreamer_new(0);
     diskstreamer_seek(stream, 0x201);

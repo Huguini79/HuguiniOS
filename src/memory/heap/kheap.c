@@ -17,7 +17,7 @@ void kheap_init()
     int res = heap_create(&kernel_heap, (void*)(HUGUINIOS_HEAP_ADDRESS), end, &kernel_heap_table);
     if (res < 0)
     {
-        imprimir_texto("Hubo un error al crear el heap\n", 0);
+        imprimir_texto("Hubo un error al crear el heap\n");
     }
 
 }
