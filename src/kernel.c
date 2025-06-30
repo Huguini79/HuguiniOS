@@ -7,6 +7,9 @@
 #include "memory/heap/kheap.h"
 #include "string/string.h"
 #include "disk/disk.h"
+#include "task/tss.h"
+#include "task/process.h"
+#include "task/task.h"
 #include "memory/paging/paging.h"
 #include "fs/pparser.h"
 #include "disk/streamer.h"
@@ -75,20 +78,15 @@ void imprimir_texto(const char* texto, int fila) {
 
 static struct paging_4gb_chunk* kernel_chunk = 0;
 
+struct tss tss;
 struct gdt gdt_real[HUGUINIOS_TOTAL_GDT_SEGMENTS];
-
 struct gdt_structured gdt_structured[HUGUINIOS_TOTAL_GDT_SEGMENTS] = {
-
-
     {.base = 0x00, .limit = 0x00, .type = 0x00},                // NULL Segment
-
-
     {.base = 0x00, .limit = 0xffffffff, .type = 0x9a},           // Kernel code segment
-
-
-    {.base = 0x00, .limit = 0xffffffff, .type = 0x92}            // Kernel data segment
-
-
+    {.base = 0x00, .limit = 0xffffffff, .type = 0x92},            // Kernel data segment
+    {.base = 0x00, .limit = 0xffffffff, .type = 0xf8},              // User code segment
+    {.base = 0x00, .limit = 0xffffffff, .type = 0xf2},             // User data segment
+    {.base = (uint32_t)&tss, .limit=sizeof(tss), .type = 0xE9}      // TSS Segment
 };
 
 void kernel_main() {
@@ -106,7 +104,7 @@ void kernel_main() {
 
     idt_init();
 
-	kernel_chunk = paging_new_4gb(PAGING_IS_WRITEABLE | PAGING_IS_PRESENT | PAGING_ACCESS_FROM_ALL);
+	kernel_chunk = paging_new_4gb(PAGING_IS_WRITEABLE | PAGING_IS_PRESENT);
 	
 	paging_switch(paging_4gb_chunk_get_directory(kernel_chunk));
 	
@@ -154,9 +152,14 @@ void kernel_main() {
     
     memset(gdt_real, 0x00, sizeof(gdt_real));
 
-
     gdt_structured_to_gdt(gdt_real, gdt_structured, HUGUINIOS_TOTAL_GDT_SEGMENTS);
-               
+
+
+    memset(&tss, 0x00, sizeof(tss));
+    tss.esp0 = 0x600000;
+    tss.ss0 = KERNEL_DATA_SELECTOR;
+
+
     while(1) {
         __asm__("hlt");
         
