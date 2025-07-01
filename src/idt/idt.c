@@ -20,7 +20,9 @@ extern void int21h();
 extern void no_interrumpt();
 
 void int21h_handler() {
-	imprimir_texto("TECLA PRESIONADA");
+    uint8_t scan_code = insb(0x60);
+    (void)scan_code;
+	imprimir_texto("TECLA PRESIONADA\n\n");
 	outb(0x20, 0x20);
 }
 
@@ -52,7 +54,8 @@ void idt_init() {
 	
 	idt_set(0, idt_zero);
 	
-	idt_set(0x21, int21h);
+	idt_set(0x09, int21h);
 	
 	idt_load(&idtr_descriptor);
+	
 }

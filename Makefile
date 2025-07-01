@@ -24,6 +24,9 @@ all: ./bin/boot.bin ./bin/kernel.bin
 ./bin/kernel.bin: $(FILES)
 	i686-elf-ld -g --relocatable $(FILES) -o ./bin/kernelfull.o
 	i686-elf-gcc -w -T ./src/linker.ld -o ./bin/kernel.bin -ffreestanding -O2 -nostdlib -fno-use-linker-plugin ./bin/kernelfull.o
+    
+	i686-elf-ld -g -T ./src/linker.ld -o ./bin/kernel.elf ./bin/kernelfull.o
+
 
   
 ./bin/boot.bin: ./src/boot/boot.asm

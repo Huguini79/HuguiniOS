@@ -103,15 +103,15 @@ void kernel_main() {
 	const char mensaje9[] = "El archivo hola.txt ha sido encontrado exitosamente.\n";
 
     idt_init();
+    
+    outb(0x21, 0xFD);  // Habilita solo IRQ1 (teclado)
+outb(0xA1, 0xFF);  // Deshabilita todas las interrupciones del segundo PIC
 
 	kernel_chunk = paging_new_4gb(PAGING_IS_WRITEABLE | PAGING_IS_PRESENT);
 	
 	paging_switch(paging_4gb_chunk_get_directory(kernel_chunk));
 	
 	enable_paging();
-    
-    outb(0x21, 0xFF);
-	outb(0xA1, 0xFF);
 
     enable_interrumpts();
     
