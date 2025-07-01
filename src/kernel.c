@@ -7,9 +7,6 @@
 #include "memory/heap/kheap.h"
 #include "string/string.h"
 #include "disk/disk.h"
-#include "task/tss.h"
-#include "task/process.h"
-#include "task/task.h"
 #include "string/string.h"
 #include "memory/paging/paging.h"
 #include "fs/pparser.h"
@@ -53,6 +50,16 @@ void terminal_writechar(char c, char colour)
     }
 }
 
+void limpiar_pantalla() {
+    for (int y = 0; y < VGA_HEIGHT; y++) {
+        for (int x = 0; x < VGA_WIDTH; x++) {
+            terminal_putchar(x, y, ' ', 0);
+        }
+    }
+    terminal_row = 0;
+    terminal_col = 0;
+}
+
 void terminal_initialize()
 {
     video_mem = (uint16_t*)(0xB8000);
@@ -78,7 +85,6 @@ void imprimir_texto(const char* str) {
 
 static struct paging_4gb_chunk* kernel_chunk = 0;
 
-struct tss tss;
 struct gdt gdt_real[HUGUINIOS_TOTAL_GDT_SEGMENTS];
 struct gdt_structured gdt_structured[HUGUINIOS_TOTAL_GDT_SEGMENTS] = {
     {.base = 0x00, .limit = 0x00, .type = 0x00},                // NULL Segment
@@ -86,21 +92,10 @@ struct gdt_structured gdt_structured[HUGUINIOS_TOTAL_GDT_SEGMENTS] = {
     {.base = 0x00, .limit = 0xffffffff, .type = 0x92},            // Kernel data segment
     {.base = 0x00, .limit = 0xffffffff, .type = 0xf8},              // User code segment
     {.base = 0x00, .limit = 0xffffffff, .type = 0xf2},             // User data segment
-    {.base = (uint32_t)&tss, .limit=sizeof(tss), .type = 0xE9}      // TSS Segment
 };
 
 void kernel_main() {
     terminal_initialize();
-			
-	const char mensaje[] = "BIENVENIDO A HuguiniOS\n\n";
-	const char mensaje2[] = "Te estoy hablando desde C :)\n";
-	const char mensaje3[] = "Sistema operativo hecho en Ensamblador y C por Huguini\n";
-	const char mensaje4[] = "..................................................\n";
-	const char mensaje5[] = "...................HuguiniOS......................\n";
-	const char mensaje6[] = "..................................................\n";
-	const char mensaje7[] = "\nEl disco se ha cargado correctamente.\n";
-	const char mensaje8[] = "No se ha podido encontrar el archivo hola.txt, verifica que esté el archivo junto a tu os.bin o HuguiniOS.img\n";
-	const char mensaje9[] = "El archivo hola.txt ha sido encontrado exitosamente.\n";
 
     idt_init();
     
@@ -120,29 +115,13 @@ outb(0xA1, 0xFF);  // Deshabilita todas las interrupciones del segundo PIC
     kheap_init();
 
     outb(0x60, 0xff); 
-			
-    imprimir_texto(mensaje);
-    imprimir_texto(mensaje2);
-    imprimir_texto(mensaje3);
-    imprimir_texto(mensaje4);
-    imprimir_texto(mensaje4);
-    imprimir_texto(mensaje4);
-    imprimir_texto(mensaje4);
-    imprimir_texto(mensaje5);
-    imprimir_texto(mensaje5);
-    imprimir_texto(mensaje5);
-    imprimir_texto(mensaje5);
-    imprimir_texto(mensaje5);
-    imprimir_texto(mensaje5);
-    imprimir_texto(mensaje6);
-    imprimir_texto(mensaje6);
-    imprimir_texto(mensaje6);
-    imprimir_texto(mensaje6);
+		  
+    imprimir_texto("BIENVENIDO A HuguiniOS\n\n");
+    imprimir_texto("Introduce un comando, presiona ALT para limpiar la pantalla\n\n");
+    imprimir_texto("ordenador:~/HuguiniOS$ ");
         
     char buf[512];
     disk_read_sector(0, 1, buf);
-    
-    imprimir_texto(mensaje7);
     
     struct disk_stream* stream = diskstreamer_new(0);
     diskstreamer_seek(stream, 0x201);
@@ -153,11 +132,6 @@ outb(0xA1, 0xFF);  // Deshabilita todas las interrupciones del segundo PIC
     memset(gdt_real, 0x00, sizeof(gdt_real));
 
     gdt_structured_to_gdt(gdt_real, gdt_structured, HUGUINIOS_TOTAL_GDT_SEGMENTS);
-
-
-    memset(&tss, 0x00, sizeof(tss));
-    tss.esp0 = 0x600000;
-    tss.ss0 = KERNEL_DATA_SELECTOR;
 
 
     while(1) {

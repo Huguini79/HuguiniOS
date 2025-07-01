@@ -22,8 +22,84 @@ extern void no_interrumpt();
 void int21h_handler() {
     uint8_t scan_code = insb(0x60);
     (void)scan_code;
-	imprimir_texto("TECLA PRESIONADA\n\n");
-	outb(0x20, 0x20);
+    if(scan_code == 0x1E) {
+          imprimir_texto("a");
+          
+    } else if(scan_code == 0x30) {
+      imprimir_texto("b");
+    } else if(scan_code == 0x2E) {
+          imprimir_texto("c");
+          
+    } else if(scan_code == 0x20) {
+      imprimir_texto("d");
+    } else if(scan_code == 0x12) {
+      imprimir_texto("e");
+    } else if(scan_code == 0x21) {
+          imprimir_texto("f");
+          
+    } else if(scan_code == 0x22) {
+      imprimir_texto("g");
+    } else if(scan_code == 0x23) {
+      imprimir_texto("h");
+    } else if(scan_code == 0x17) {
+          imprimir_texto("i");
+          
+    } else if(scan_code == 0x24) {
+      imprimir_texto("j");
+    } else if(scan_code == 0x25) {
+      imprimir_texto("k");
+    } else if(scan_code == 0x26) {
+          imprimir_texto("l");
+          
+    } else if(scan_code == 0x32) {
+      imprimir_texto("m");
+    } else if(scan_code == 0x31) {
+      imprimir_texto("n");
+    } else if(scan_code == 0x18) {
+          imprimir_texto("o");
+          
+    } else if(scan_code == 0x19) {
+      imprimir_texto("p");
+    } else if(scan_code == 0x10) {
+      imprimir_texto("q");
+    } else if(scan_code == 0x13) {
+          imprimir_texto("r");
+          
+    } else if(scan_code == 0x22) {
+      imprimir_texto("g");
+    } else if(scan_code == 0x13) {
+      imprimir_texto("r");
+    } else if(scan_code == 0x1F) {
+          imprimir_texto("s");
+          
+    } else if(scan_code == 0x14) {
+      imprimir_texto("t");
+    } else if(scan_code == 0x16) {
+      imprimir_texto("u");
+    } else if(scan_code == 0x2F) {
+          imprimir_texto("v");
+          
+    } else if(scan_code == 0x11) {
+      imprimir_texto("w");
+    } else if(scan_code == 0x2D) {
+      imprimir_texto("x");
+    } else if(scan_code == 0x15) {
+          imprimir_texto("y");
+          
+    } else if(scan_code == 0x2C) {
+      imprimir_texto("z");
+    } else if(scan_code == 0x39) {
+      imprimir_texto(" ");
+      
+    } else if(scan_code == 0x38) {
+      limpiar_pantalla();
+      imprimir_texto("ordenador:~/HuguiniOS$ ");
+      
+    } else if(scan_code == 0x1C) {
+      imprimir_texto("\n");
+      imprimir_texto("ordenador:~/HuguiniOS$ ");
+    }
+    	outb(0x20, 0x20);
 }
 
 void no_interrumpt_handler() {
