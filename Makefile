@@ -1,5 +1,6 @@
-FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt/idt.asm.o ./build/idt/idt.o ./build/memory/memory.o ./build/io/io.asm.o ./build/memory/heap/heap.o ./build/memory/heap/kheap.o ./build/disk/disk.o ./build/string/string.o ./build/memory/paging/paging.o ./build/memory/paging/paging.asm.o ./build/fs/pparser.o ./build/disk/streamer.o ./build/gdt/gdt.o ./build/fs/file.o ./build/fs/fat/fat16.o ./build/loader/formats/elf.o ./build/loader/formats/elfloader.o
+FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt/idt.asm.o ./build/idt/idt.o ./build/memory/memory.o ./build/io/io.asm.o ./build/memory/heap/heap.o ./build/memory/heap/kheap.o ./build/disk/disk.o ./build/string/string.o ./build/memory/paging/paging.o ./build/memory/paging/paging.asm.o ./build/fs/pparser.o ./build/disk/streamer.o ./build/gdt/gdt.o ./build/fs/file.o ./build/fs/fat/fat16.o ./build/loader/formats/elf.o ./build/loader/formats/elfloader.o ./build/programs/calculator.o
 INCLUDES = -I./src
+
 FLAGS = -g -ffreestanding -fno-pic -fno-pie -no-pie \
         -falign-jumps -falign-functions -falign-labels \
         -falign-loops -fstrength-reduce -fomit-frame-pointer \
@@ -7,7 +8,7 @@ FLAGS = -g -ffreestanding -fno-pic -fno-pie -no-pie \
         -Wno-unused-parameter -nostdlib -nostartfiles \
         -nodefaultlibs -Wall -O2 -Iinc
 
-DIRS = ./build ./bin ./build/io ./build/idt ./build/memory ./build/memory/heap ./build/disk ./build/string ./build/memory/paging ./build/fs ./build/gdt ./build/fs/fat ./build/loader/formats
+DIRS = ./build ./bin ./build/io ./build/idt ./build/memory ./build/memory/heap ./build/disk ./build/string ./build/memory/paging ./build/fs ./build/gdt ./build/fs/fat ./build/loader/formats ./build/programs
 $(shell mkdir -p $(DIRS))./build/fs/fat/fat16.o: ./src/fs/fat/fat16.c
 	i686-elf-gcc -w $(INCLUDES) -I ./src/fs/fat $(FLAGS) -std=gnu99 -c ./src/fs/fat/fat16.c -o ./build/fs/fat/fat16.o
 
@@ -88,6 +89,10 @@ all: ./bin/boot.bin ./bin/kernel.bin
 	
 ./build/loader/formats/elfloader.o: ./src/loader/formats/elfloader.c
 	i686-elf-gcc -w $(INCLUDES) -I ./src/loader/formats $(FLAGS) -std=gnu99 -c ./src/loader/formats/elfloader.c -o ./build/loader/formats/elfloader.o
+	
+	
+./build/programs/calculator.o: ./src/programs/calculator.c
+	i686-elf-gcc -w $(INCLUDES) -I ./src/programs/ $(FLAGS) -std=gnu99 -c ./src/programs/calculator.c -o ./build/programs/calculator.o
 	
  clean:
 	rm -rf ./bin/boot.bin

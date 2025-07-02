@@ -5,6 +5,7 @@
 #include "fs/pparser.h"
 #include "fs/fat/fat16.h"
 #include "string/string.h"
+#include "programs/calculator.h"
 #include "io/io.h"
 
 int pos;
@@ -25,6 +26,9 @@ extern void int21h();
 extern void no_interrumpt();
 
 char comando[100];
+
+int num1;
+int num2;
 
 void agregar_caracter(char c) {
   comando[pos++] = c;
@@ -136,9 +140,50 @@ void int21h_handler() {
       limpiar_pantalla();
       imprimir_texto("ordenador:~/HuguiniOS$ ");
       
-    } else if(scan_code == 0x1C) {
+    } else if(scan_code == 0x02) {
+      imprimir_texto("1");
+    } else if(scan_code == 0x03) {
+      imprimir_texto("2");
+    } else if(scan_code == 0x04) {
+      imprimir_texto("3");
+    } else if(scan_code == 0x05) {
+      imprimir_texto("4");
+    } else if(scan_code == 0x06) {
+      imprimir_texto("5");
+    } else if(scan_code == 0x07) {
+      imprimir_texto("6");
+    } else if(scan_code == 0x08) {
+      imprimir_texto("7");
+    } else if(scan_code == 0x09) {
+      imprimir_texto("8");
+    } else if(scan_code == 0x0A) {
+      imprimir_texto("9");
+    } else if(scan_code == 0x0B) {
+      imprimir_texto("0");
+    }else if(scan_code == 0x02) {
+      imprimir_texto("1");
+    } else if(scan_code == 0x03) {
+      imprimir_texto("2");
+    } else if(scan_code == 0x04) {
+      imprimir_texto("3");
+    } else if(scan_code == 0x05) {
+      imprimir_texto("4");
+    } else if(scan_code == 0x06) {
+      imprimir_texto("5");
+    } else if(scan_code == 0x07) {
+      imprimir_texto("6");
+    } else if(scan_code == 0x08) {
+      imprimir_texto("7");
+    } else if(scan_code == 0x09) {
+      imprimir_texto("8");
+    } else if(scan_code == 0x0A) {
+      imprimir_texto("9");
+    } else if(scan_code == 0x0B) {
+      imprimir_texto("0");
+    }
+    else if(scan_code == 0x1C) {
       if(strncmp(comando, "ver", 7) == 0) {
-        imprimir_texto("\nSistema operativo HuguiniOS, desarrollado por Huguini79 Github\n\n");
+        imprimir_texto("\nSistema operativo HuguiniOS, desarrollado por Huguini79 Github desde cero\n\n");
         imprimir_texto("ordenador:~/HuguiniOS$ ");
         
       } else if(strncmp(comando, "clear", 7) == 0) {
@@ -151,6 +196,7 @@ void int21h_handler() {
         }
         imprimir_texto("\n\nordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, "cargararchivo", 7) == 0) {
+              fs_init();
           int fd = fopen("0:/hola.txt", "r");
           if(fd >= 0) {
             char buffer[200];
@@ -171,11 +217,16 @@ void int21h_handler() {
           imprimir_texto("\nordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, "help", 7) == 0) {
           imprimir_texto("\n................................................................................\n");
-          imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\ncargararchivo - Cargar archivo hola.txt(no funciona muy bien esa funcion)\nexit - Apagar el ordenador\n\n................................................................................\n\n");
+          imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\ncargararchivo - Cargar archivo hola.txt(no funciona muy bien esa funcion)\nexit - Apagar el ordenador\ncalculadora - Calculadora\n\n................................................................................\n\n");
                     imprimir_texto("ordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, "exit", 7) == 0) {
           outw(0x604, 0x2000);
       }
+       else if(strncmp(comando, "calculadora", 7) == 0) {
+          limpiar_pantalla();
+          imprimir_texto("CALCULADORA\n\n\n\n");
+          ensenar();
+       }
       else {
         imprimir_texto("\nComando no reconocido");
         imprimir_texto("\n\n");

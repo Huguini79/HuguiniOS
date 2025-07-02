@@ -10,6 +10,38 @@ char tolower(char s1)
     return s1;
 }
 
+void itoa(int num, char* buffer) {
+    int i = 0;
+    int isNegative = 0;
+
+    if (num == 0) {
+        buffer[i++] = '0';
+        buffer[i] = '\0';
+        return;
+    }
+
+    if (num < 0) {
+        isNegative = 1;
+        num = -num;
+    }
+
+    while (num > 0) {
+        buffer[i++] = (num % 10) + '0';
+        num = num / 10;
+    }
+
+    if (isNegative)
+        buffer[i++] = '-';
+
+    buffer[i] = '\0';
+
+    for (int j = 0; j < i / 2; ++j) {
+        char temp = buffer[j];
+        buffer[j] = buffer[i - j - 1];
+        buffer[i - j - 1] = temp;
+    }
+}
+
 int strlen(const char* ptr)
 {
     int i = 0;
