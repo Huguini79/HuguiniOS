@@ -117,7 +117,7 @@ outb(0xA1, 0xFF);  // Deshabilita todas las interrupciones del segundo PIC
     outb(0x60, 0xff); 
 		  
     imprimir_texto("BIENVENIDO A HuguiniOS\n\n");
-    imprimir_texto("Introduce un comando, presiona ALT para limpiar la pantalla\n\n");
+    imprimir_texto("Introduce un comando, presiona ALT para limpiar la pantalla o escribe clear, consulta los comandos disponibles con el comando help\n\n");
     imprimir_texto("ordenador:~/HuguiniOS$ ");
         
     char buf[512];
