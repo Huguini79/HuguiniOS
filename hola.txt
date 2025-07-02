@@ -1,0 +1,1 @@
+Hola, este es un archivo llamado hola.txt, el sistema operativo lo ha leido

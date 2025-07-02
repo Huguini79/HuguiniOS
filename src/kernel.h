@@ -6,6 +6,8 @@
 
 #define HUGUINIOS_MAX_PATH 108
 
+int color_terminal;
+
 void imprimir_texto(const char* str);
 void kernel_main();
 

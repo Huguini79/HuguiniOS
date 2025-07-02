@@ -75,11 +75,13 @@ void terminal_initialize()
     }   
 }
 
+color_terminal = 15;
+
 void imprimir_texto(const char* str) {
     size_t len = strlen(str);
     for (int i = 0; i < len; i++)
     {
-        terminal_writechar(str[i], 15);
+        terminal_writechar(str[i], color_terminal);
     }
 }
 
