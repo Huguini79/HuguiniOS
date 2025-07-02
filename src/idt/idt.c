@@ -6,6 +6,7 @@
 #include "fs/fat/fat16.h"
 #include "string/string.h"
 #include "programs/calculator.h"
+#include "programs/hola.h"
 #include "io/io.h"
 
 int pos;
@@ -216,8 +217,9 @@ void int21h_handler() {
       } else if(strncmp(comando, "   ", 7) == 0) {
           imprimir_texto("\nordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, "help", 7) == 0) {
+      limpiar_pantalla();
           imprimir_texto("\n................................................................................\n");
-          imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\ncargararchivo - Cargar archivo hola.txt(no funciona muy bien esa funcion)\nexit - Apagar el ordenador\ncalculadora - Calculadora\n\n................................................................................\n\n");
+          imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\ncargararchivo - Cargar archivo hola.txt(no funciona muy bien esa funcion)\nexit - Apagar el ordenador\ncalculadora - Calculadora\nguiblanca - Muestra toda la pantalla blanca, presiona ALT para limpiar la pantalla despues de eso\nhola - un hola mundo simple\n\n................................................................................\n\n");
                     imprimir_texto("ordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, "exit", 7) == 0) {
           outw(0x604, 0x2000);
@@ -226,6 +228,13 @@ void int21h_handler() {
           limpiar_pantalla();
           imprimir_texto("CALCULADORA\n\n\n\n");
           ensenar();
+       } else if(strncmp(comando, "guiblanca", 7) == 0) {
+          limpiar_pantalla();
+          for(int i = 0; i <= 1000; i++) {
+            imprimir_texto("█");
+          }
+       } else if(strncmp(comando, "hola", 7) == 0) {
+          decir_hola();
        }
       else {
         imprimir_texto("\nComando no reconocido");
@@ -234,6 +243,13 @@ void int21h_handler() {
       }
       comando[0] = '\0';
       pos = 0;
+    } else if(scan_code == 0x0E) {
+      if (pos > 0) {
+        comando[--pos] = '\0';
+    }
+      limpiar_pantalla();
+      imprimir_texto("ordenador:~/HuguiniOS$ ");
+      imprimir_texto(comando);
     }
     	outb(0x20, 0x20);
 }
