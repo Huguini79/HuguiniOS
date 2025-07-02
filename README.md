@@ -1,6 +1,6 @@
 ![HuguiniOS](https://github.com/user-attachments/assets/8626dd3d-c1d2-4648-8adf-29595efa4268)
 
-This operating system was made by Huguini79 in 2 months, this operating system is from scratch.
+This operating system was made by Huguini79 in 3 months, this operating system is from scratch.
 
 The operating system(including IDT interrumptions, disk driver, FAT16, gdt descriptor, kheap, string, pparser, paging, memory heap etc, I/O ports, ELF loader, AND A SHELL), it's wrote in C and Assembly, and it's being constantly updated.
 
