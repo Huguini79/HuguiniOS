@@ -3,12 +3,15 @@
 
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
+#define MAX_LINE_LENGTH 256
 
 #define HUGUINIOS_MAX_PATH 108
 
 int color_terminal;
 
 void imprimir_texto(const char* str);
+void crear_boton(const char* texto);
+void crear_ventana(const char* titulo, const char* contenido);
 void kernel_main();
 
 #endif

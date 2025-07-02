@@ -16,6 +16,7 @@
 
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
+#define MAX_LINE_LENGTH 256
 
 uint16_t* video_mem;
 uint16_t terminal_row;
@@ -85,6 +86,73 @@ void imprimir_texto(const char* str) {
     }
 }
 
+void crear_boton(const char* texto) {
+  imprimir_texto("╔══╗\n");
+  imprimir_texto("║");
+  imprimir_texto(texto);
+  imprimir_texto("║");
+  imprimir_texto("\n╚══╝");
+}
+
+void escribir_linea_borde(const char inicio, const char relleno, const char fin, int largo) {
+    terminal_writechar(inicio, color_terminal);
+    for (int i = 0; i < largo; i++) {
+        terminal_writechar(relleno, color_terminal);
+    }
+    terminal_writechar(fin, color_terminal);
+    terminal_writechar('\n', color_terminal);
+}
+
+void centrar_y_escribir(const char* texto, int ancho) {
+    int len = strlen(texto);
+    int padding = (ancho - len) / 2;
+
+    terminal_writechar('║', color_terminal);
+    for (int i = 0; i < padding; i++) terminal_writechar(' ', color_terminal);
+    for (int i = 0; i < len; i++) terminal_writechar(texto[i], color_terminal);
+    for (int i = 0; i < (ancho - len - padding); i++) terminal_writechar(' ', color_terminal);
+    terminal_writechar('║', color_terminal);
+    terminal_writechar('\n', color_terminal);
+}
+
+void crear_ventana(const char* titulo, const char* contenido) {
+    const char* ptr = contenido;
+    const char* inicio_linea = ptr;
+    int max_contenido = strlen(titulo);
+    char linea[MAX_LINE_LENGTH];
+    int num_lineas = 0;
+    const char* lineas[20];
+    static char lineas_copia[20][MAX_LINE_LENGTH];
+
+    while (*ptr) {
+        if (*ptr == '\n' || *(ptr + 1) == '\0') {
+            int len = ptr - inicio_linea + ((*ptr == '\n') ? 0 : 1);
+            if (len > MAX_LINE_LENGTH - 1) len = MAX_LINE_LENGTH - 1;
+            memcpy(lineas_copia[num_lineas], inicio_linea, len);
+            lineas_copia[num_lineas][len] = '\0';
+            lineas[num_lineas] = lineas_copia[num_lineas];
+            if (len > max_contenido) max_contenido = len;
+            num_lineas++;
+            inicio_linea = ptr + 1;
+        }
+        ptr++;
+    }
+
+    int ancho_total = max_contenido + 17; // márgenes
+
+    escribir_linea_borde('╔', '═', '╗', ancho_total);
+
+    centrar_y_escribir(titulo, ancho_total);
+
+    escribir_linea_borde('╠', '═', '╣', ancho_total);
+
+    for (int i = 0; i < num_lineas; i++) {
+        centrar_y_escribir(lineas[i], ancho_total);
+    }
+
+    escribir_linea_borde('╚', '═', '╝', ancho_total);
+}
+
 static struct paging_4gb_chunk* kernel_chunk = 0;
 
 struct gdt gdt_real[HUGUINIOS_TOTAL_GDT_SEGMENTS];
@@ -117,10 +185,9 @@ outb(0xA1, 0xFF);  // Deshabilita todas las interrupciones del segundo PIC
     kheap_init();
 
     outb(0x60, 0xff); 
-		  
-    imprimir_texto("BIENVENIDO A HuguiniOS\n\n");
-    imprimir_texto("Introduce un comando, presiona ALT para limpiar la pantalla o escribe clear, consulta los comandos disponibles con el comando help\n\n");
-    imprimir_texto("ordenador:~/HuguiniOS$ ");
+		   
+    limpiar_pantalla();
+    crear_ventana("BIENVENIDO A HuguiniOS", "\n\n\n\n\n\n\n\n\n\nPRESIONA ALT PARA QUITAR ESTA VENTANA\n\n\n\n\n\n\n\n\n"); 
         
     char buf[512];
     disk_read_sector(0, 1, buf);
@@ -135,11 +202,10 @@ outb(0xA1, 0xFF);  // Deshabilita todas las interrupciones del segundo PIC
 
     gdt_structured_to_gdt(gdt_real, gdt_structured, HUGUINIOS_TOTAL_GDT_SEGMENTS);
 
-
     while(1) {
         __asm__("hlt");
         
-    }
+   }
 
        
 }

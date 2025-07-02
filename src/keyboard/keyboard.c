@@ -173,8 +173,9 @@ uint8_t scan_code = insb(0x60);
     }
     else if(scan_code == 0x1C) {
       if(strncmp(comando, "ver", 7) == 0) {
-        imprimir_texto("\nSistema operativo HuguiniOS, desarrollado por Huguini79 Github desde cero\n\n");
-        imprimir_texto("ordenador:~/HuguiniOS$ ");
+        limpiar_pantalla();
+        crear_ventana("VERSION SISTEMA OPERATIVO", "\n\n\n\n\n\n\n\n\n\nSistema operativo por Huguini79\nDesarrollado desde cero\nY se llama HuguiniOS\n\n\n\n\n\n\n\n\n");
+        imprimir_texto("\n\n");
         
       } else if(strncmp(comando, "clear", 7) == 0) {
         limpiar_pantalla();
