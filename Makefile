@@ -1,4 +1,4 @@
-FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt/idt.asm.o ./build/idt/idt.o ./build/memory/memory.o ./build/io/io.asm.o ./build/memory/heap/heap.o ./build/memory/heap/kheap.o ./build/disk/disk.o ./build/string/string.o ./build/memory/paging/paging.o ./build/memory/paging/paging.asm.o ./build/fs/pparser.o ./build/disk/streamer.o ./build/gdt/gdt.o ./build/fs/file.o ./build/fs/fat/fat16.o ./build/loader/formats/elf.o ./build/loader/formats/elfloader.o ./build/programs/calculator.o ./build/programs/hola.o ./build/keyboard/keyboard.o ./build/programs/guibonita.o
+FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt/idt.asm.o ./build/idt/idt.o ./build/memory/memory.o ./build/io/io.asm.o ./build/memory/heap/heap.o ./build/memory/heap/kheap.o ./build/disk/disk.o ./build/string/string.o ./build/memory/paging/paging.o ./build/memory/paging/paging.asm.o ./build/fs/pparser.o ./build/disk/streamer.o ./build/gdt/gdt.o ./build/fs/file.o ./build/fs/fat/fat16.o ./build/loader/formats/elf.o ./build/loader/formats/elfloader.o ./build/programs/calculator.o ./build/programs/hola.o ./build/keyboard/keyboard.o ./build/programs/guibonita.o ./build/programs/editordetexto.o
 INCLUDES = -I./src
 
 FLAGS = -g -ffreestanding -fno-pic -fno-pie -no-pie \
@@ -15,11 +15,12 @@ $(shell mkdir -p $(DIRS))
 all: ./bin/boot.bin ./bin/kernel.bin
 	rm -rf ./bin/HuguiniOS.img
 	rm -rf ./bin/os.bin
-	dd if=./bin/boot.bin >> ./bin/HuguiniOS.img
+	dd if=/dev/zero of=./bin/HuguiniOS.img bs=512 count=2880
+	dd if=./bin/boot.bin of=./bin/HuguiniOS.img bs=512 count=1 conv=notrunc
 	dd if=./bin/boot.bin >> ./bin/os.bin
-	dd if=./bin/kernel.bin >> ./bin/HuguiniOS.img
+	dd if=./bin/kernel.bin of=./bin/HuguiniOS.img bs=512 seek=1 conv=notrunc
 	dd if=./bin/kernel.bin >> ./bin/os.bin
-	dd if=/dev/zero bs=512 count=100 >> ./bin/HuguiniOS.img
+	dd if=hola.txt of=./bin/HuguiniOS.img bs=512 seek=50 conv=notrunc
 	dd if=/dev/zero bs=512 count=100 >> ./bin/os.bin
 	
 ./bin/kernel.bin: $(FILES)
@@ -74,7 +75,8 @@ all: ./bin/boot.bin ./bin/kernel.bin
 	
 ./build/disk/streamer.o: ./src/disk/streamer.c
 	i686-elf-gcc -w $(INCLUDES) -I ./src/disk/ $(FLAGS) -std=gnu99 -c ./src/disk/streamer.c -o ./build/disk/streamer.o
-	
+	dd if=/dev/zero of=./bin/HuguiniOS.img bs=512 count=2880
+
 ./build/gdt/gdt.o: ./src/gdt/gdt.c
 	i686-elf-gcc -w $(INCLUDES) -I ./src/gdt/ $(FLAGS) -std=gnu99 -c ./src/gdt/gdt.c -o ./build/gdt/gdt.o
 	
@@ -103,6 +105,9 @@ all: ./bin/boot.bin ./bin/kernel.bin
 	
 ./build/programs/guibonita.o: ./src/programs/guibonita.c
 	i686-elf-gcc -w $(INCLUDES) -I./src/programs $(FLAGS) -std=gnu99 -c ./src/programs/guibonita.c -o ./build/programs/guibonita.o
+	
+./build/programs/editordetexto.o: ./src/programs/editordetexto.c
+	i686-elf-gcc -w $(INCLUDES) -I./src/programs $(FLAGS) -std=gnu99 -c ./src/programs/editordetexto.c -o ./build/programs/editordetexto.o
 	
  clean:
 	rm -rf ./bin/boot.bin

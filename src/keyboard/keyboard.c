@@ -2,8 +2,19 @@
 #include "idt/idt.h"
 #include "../kernel.h"
 #include "keyboard.h"
+#include "fs/file.h"
+#include "fs/fat/fat16.h"
+#include "fs/pparser.h"
+#include "string/string.h"
 #include "programs/calculator.h"
 #include "programs/guibonita.h"
+#include "programs/editordetexto.h"
+
+#include <stdbool.h>
+
+bool app_editor_de_texto = false;
+
+int contador = 1;
 
 int pos;
 
@@ -127,6 +138,7 @@ uint8_t scan_code = insb(0x60);
       imprimir_texto("ordenador:~/HuguiniOS$ ");
     }
     else if(scan_code == 0x38) {
+      app_editor_de_texto = false;
       limpiar_pantalla();
       imprimir_texto("ordenador:~/HuguiniOS$ ");
       
@@ -170,8 +182,22 @@ uint8_t scan_code = insb(0x60);
       imprimir_texto("9");
     } else if(scan_code == 0x0B) {
       imprimir_texto("0");
+    } else if(scan_code == 0x36) {
+      if(app_editor_de_texto == false) {
+        imprimir_texto("");
+      } else {
+        agregar_caracter('\n');
+        imprimir_texto("\n");
+      }
     }
     else if(scan_code == 0x1C) {
+      contador = 1;
+      if(app_editor_de_texto == true) {
+        agregar_caracter('\n');
+        imprimir_texto("\n");
+      } else {
+        contador++;
+      app_editor_de_texto = false;
       if(strncmp(comando, "ver", 7) == 0) {
         limpiar_pantalla();
         crear_ventana("VERSION SISTEMA OPERATIVO", "\n\n\n\n\n\n\n\n\n\nSistema operativo por Huguini79\nDesarrollado desde cero\nY se llama HuguiniOS\n\n\n\n\n\n\n\n\n");
@@ -187,17 +213,14 @@ uint8_t scan_code = insb(0x60);
         }
         imprimir_texto("\n\nordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, "cargararchivo", 7) == 0) {
-              fs_init();
-          int fd = fopen("0:/hola.txt", "r");
-          if(fd >= 0) {
-            char buffer[200];
-            fread(buffer, 1, sizeof(buffer)-1, fd);
-            buffer[199] = '\0';
-            imprimir_texto("\n");
-            imprimir_texto(buffer);
-            imprimir_texto("\n\n");
-            fclose(fd);
-          }
+              int fd = fopen("0:/hola.txt", "r");
+              if(fd) {
+                imprimir_texto("\nEl archivo hola.txt ha sido cargado exitosamente\n\n");
+                imprimir_texto("ordenador:~/HuguiniOS$ ");
+              } else {
+                imprimir_texto("\nNo se ha podido cargar el archivo hola.txt en la carpeta raíz\n\n");
+                imprimir_texto("ordenador:~/HuguiniOS$ ");
+              }
       } else if(strncmp(comando, "", 7) == 0) {
           imprimir_texto("\nordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, " ", 7) == 0) {
@@ -217,12 +240,14 @@ uint8_t scan_code = insb(0x60);
       else if(strncmp(comando, "help", 7) == 0) {
       limpiar_pantalla();
           imprimir_texto("\n................................................................................\n");
-          imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\ncargararchivo - Cargar archivo hola.txt(no funciona muy bien esa funcion)\nexit - Apagar el ordenador\ncalculadora - Calculadora\nguiblanca - Muestra toda la pantalla blanca, presiona ALT para limpiar la pantalla despues de eso\nhola - un hola mundo simple\nguibonita - Muestra un texto con varios colores\nhteclado - Teclas especificas para cambiar el color del texto de la pantalla\n\n................................................................................\n\n");
+          imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\ncargararchivo - Cargar archivo hola.txt(no funciona muy bien esa funcion)\nexit - Apagar el ordenador\ncalculadora - Calculadora\nguiblanca - Muestra toda la pantalla blanca, presiona ALT para limpiar la pantalla despues de eso\nhola - un hola mundo simple\nguibonita - Muestra un texto con varios colores\nhteclado - Teclas especificas para cambiar el color del texto de la pantalla\neditordetexto - Editor de texto simple sin funcion de guardar archivo\n\n................................................................................\n\n");
                     imprimir_texto("ordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, "exit", 7) == 0) {
           outw(0x604, 0x2000);
       } else if(strncmp(comando, "guibonita", 7) == 0) {
         iniciar_gui_bonita();
+      } else if(strncmp(comando, "editordetexto", 7) == 0) {
+        iniciar_editor_de_texto();
       }
        else if(strncmp(comando, "calculadora", 7) == 0) {
           limpiar_pantalla();
@@ -231,7 +256,7 @@ uint8_t scan_code = insb(0x60);
        } else if(strncmp(comando, "guiblanca", 7) == 0) {
           limpiar_pantalla();
           for(int i = 0; i <= 1000; i++) {
-            imprimir_texto("█");                    imprimir_texto("ordenador:~/HuguiniOS$ ");
+            imprimir_texto("█");
           }
        } else if(strncmp(comando, "hola", 7) == 0) {
           decir_hola();
@@ -243,13 +268,23 @@ uint8_t scan_code = insb(0x60);
       }
       comando[0] = '\0';
       pos = 0;
+      
+    } 
     } else if(scan_code == 0x0E) {
       if (pos > 0) {
         comando[--pos] = '\0';
     }
       limpiar_pantalla();
-      imprimir_texto("ordenador:~/HuguiniOS$ ");
-      imprimir_texto(comando);
+      if(app_editor_de_texto == false) {
+        for(int i = 0; i < contador; i++) { 
+          imprimir_texto("\nordenador:~/HuguiniOS$ ");
+        }
+        imprimir_texto(comando);
+      } else {
+        imprimir_texto("EDITOR DE TEXTO\nNO SE VAN A GUARDAR EN NINGUN ARCHIVO EL CONTENIDO, PARA DAR UN SALTO DE LINEA, PRESIONA EL SHIFT DERECHO O ENTER\n\n");
+        imprimir_texto(comando);
+      }
+      
     }
     	outb(0x20, 0x20);
 }
