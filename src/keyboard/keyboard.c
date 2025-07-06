@@ -9,6 +9,8 @@
 #include "programs/calculator.h"
 #include "programs/guibonita.h"
 #include "programs/editordetexto.h"
+#include "games/menu.h"
+#include "games/tickdown.h"
 
 #include <stdbool.h>
 
@@ -121,6 +123,9 @@ uint8_t scan_code = insb(0x60);
       agregar_caracter('z');
       imprimir_texto("z");
     } else if(scan_code == 0x39) {
+      if(tickdown_iniciado == true) {
+        incrementar_numero();
+      }
       agregar_caracter(' ');
       imprimir_texto(" ");
       
@@ -133,9 +138,23 @@ uint8_t scan_code = insb(0x60);
       color_terminal = 6;
       imprimir_texto("ordenador:~/HuguiniOS$ ");
     } else if(scan_code == 0x01) {
-      limpiar_pantalla();
-      color_terminal = 15;
-      imprimir_texto("ordenador:~/HuguiniOS$ ");
+      if(tickdown_iniciado == true) {
+        menu_juegos = false;
+        tickdown_iniciado = false;
+        limpiar_pantalla();
+        imprimir_texto("ordenador:~/HuguiniOS$ ");
+      
+      } else if(menu_juegos == true) {
+        menu_juegos = false;
+        tickdown_iniciado = false;
+        limpiar_pantalla();
+        imprimir_texto("ordenador:~/HuguiniOS$ ");
+      
+      } else {
+        limpiar_pantalla();
+        color_terminal = 15;
+        imprimir_texto("ordenador:~/HuguiniOS$ ");
+      }
     }
     else if(scan_code == 0x38) {
       app_editor_de_texto = false;
@@ -195,7 +214,21 @@ uint8_t scan_code = insb(0x60);
       if(app_editor_de_texto == true) {
         agregar_caracter('\n');
         imprimir_texto("\n");
-      } else {
+      } else if(menu_juegos == true || tickdown_iniciado == true) {
+          if (strncmp(comando, "tickdown", 8) == 0) {
+              iniciar_tickdown();
+          } else if (strncmp(comando, "exit", 4) == 0) {
+              menu_juegos = false;
+              tickdown_iniciado = false;
+              limpiar_pantalla();
+              imprimir_texto("ordenador:~/HuguiniOS$ ");
+          } else {
+              imprimir_texto("\nJuego no reconocido\n");
+              limpiar_pantalla();
+              imprimir_texto("ordenador:~/HuguiniOS$ ");
+          }
+      }
+      else {
         contador++;
       app_editor_de_texto = false;
       if(strncmp(comando, "ver", 7) == 0) {
@@ -240,13 +273,17 @@ uint8_t scan_code = insb(0x60);
       else if(strncmp(comando, "help", 7) == 0) {
       limpiar_pantalla();
           imprimir_texto("\n................................................................................\n");
-          imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\ncargararchivo - Cargar archivo hola.txt(no funciona muy bien esa funcion)\nexit - Apagar el ordenador\ncalculadora - Calculadora\nguiblanca - Muestra toda la pantalla blanca, presiona ALT para limpiar la pantalla despues de eso\nhola - un hola mundo simple\nguibonita - Muestra un texto con varios colores\nhteclado - Teclas especificas para cambiar el color del texto de la pantalla\neditordetexto - Editor de texto simple sin funcion de guardar archivo\n\n................................................................................\n\n");
+          imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\ncargararchivo - Cargar archivo hola.txt(no funciona muy bien esa funcion)\nexit - Apagar el ordenador\ncalculadora - Calculadora\nguiblanca - Muestra toda la pantalla blanca, presiona ALT para limpiar la pantalla despues de eso\nhola - un hola mundo simple\nguibonita - Muestra un texto con varios colores\nhteclado - Teclas especificas para cambiar el color del texto de la pantalla\neditordetexto - Editor de texto simple sin funcion de guardar archivo\nmenujuegos - Menu de juegos!\n\n................................................................................\n\n");
                     imprimir_texto("ordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, "exit", 7) == 0) {
           outw(0x604, 0x2000);
       } else if(strncmp(comando, "guibonita", 7) == 0) {
         iniciar_gui_bonita();
-      } else if(strncmp(comando, "editordetexto", 7) == 0) {
+        
+      } else if(strncmp(comando, "menujuegos", 7) == 0) {
+        iniciar_menu();
+      }
+      else if(strncmp(comando, "editordetexto", 7) == 0) {
         iniciar_editor_de_texto();
       }
        else if(strncmp(comando, "calculadora", 7) == 0) {
