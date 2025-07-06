@@ -184,7 +184,7 @@ void kernel_main() {
     /* outb(0x60, 0xff); */
 		   
     limpiar_pantalla();
-    crear_ventana("BIENVENIDO A HuguiniOS", "\n\n\n\n\n\n\n\n\n\nPRESIONA ALT PARA QUITAR ESTA VENTANA\n\n\n\n\n\n\n\n\n"); 
+    crear_ventana("           BIENVENIDO A HuguiniOS                          ", "\n\n\n\n\n\n\n\n\n\nPRESIONA ALT PARA QUITAR ESTA VENTANA\n\n\n\n\n\n\n\n\n"); 
         
     char buf[512];
     disk_read_sector(0, 1, buf);

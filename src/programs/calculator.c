@@ -3,6 +3,7 @@
 #include "../kernel.h"
 
 void ensenar() {
+  crear_ventana("                   CALCULADORA                              ", "");
   for(int i = 1; i <= 5; i++) {
     int suma = i + i;
     int resta = i - i;

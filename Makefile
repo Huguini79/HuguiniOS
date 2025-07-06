@@ -18,10 +18,13 @@ all: ./bin/boot.bin ./bin/kernel.bin
 	dd if=/dev/zero of=./bin/HuguiniOS.img bs=512 count=2880
 	dd if=./bin/boot.bin of=./bin/HuguiniOS.img bs=512 count=1 conv=notrunc
 	dd if=./bin/boot.bin >> ./bin/os.bin
+	dd if=./bin/boot.bin >> ./bin/HuguiniOS.iso
 	dd if=./bin/kernel.bin of=./bin/HuguiniOS.img bs=512 seek=1 conv=notrunc
 	dd if=./bin/kernel.bin >> ./bin/os.bin
+	dd if=./bin/kernel.bin >> ./bin/HuguiniOS.iso
 	dd if=hola.txt of=./bin/HuguiniOS.img bs=512 seek=50 conv=notrunc
 	dd if=/dev/zero bs=512 count=100 >> ./bin/os.bin
+	dd if=/dev/zero bs=512 count=100 >> ./bin/HuguiniOS.iso
 	
 ./bin/kernel.bin: $(FILES)
 	i686-elf-ld -g --relocatable $(FILES) -o ./bin/kernelfull.o
