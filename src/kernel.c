@@ -168,9 +168,6 @@ void kernel_main() {
     terminal_initialize();
 
     idt_init();
-    
-    outb(0x21, 0xFD);  // Habilita solo IRQ1 (teclado)
-outb(0xA1, 0xFF);  // Deshabilita todas las interrupciones del segundo PIC
 
 	kernel_chunk = paging_new_4gb(PAGING_IS_WRITEABLE | PAGING_IS_PRESENT);
 	
@@ -184,7 +181,7 @@ outb(0xA1, 0xFF);  // Deshabilita todas las interrupciones del segundo PIC
     
     kheap_init();
 
-    outb(0x60, 0xff); 
+    /* outb(0x60, 0xff); */
 		   
     limpiar_pantalla();
     crear_ventana("BIENVENIDO A HuguiniOS", "\n\n\n\n\n\n\n\n\n\nPRESIONA ALT PARA QUITAR ESTA VENTANA\n\n\n\n\n\n\n\n\n"); 

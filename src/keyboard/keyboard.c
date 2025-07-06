@@ -273,11 +273,30 @@ uint8_t scan_code = insb(0x60);
       else if(strncmp(comando, "help", 7) == 0) {
       limpiar_pantalla();
           imprimir_texto("\n................................................................................\n");
-          imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\ncargararchivo - Cargar archivo hola.txt(no funciona muy bien esa funcion)\nexit - Apagar el ordenador\ncalculadora - Calculadora\nguiblanca - Muestra toda la pantalla blanca, presiona ALT para limpiar la pantalla despues de eso\nhola - un hola mundo simple\nguibonita - Muestra un texto con varios colores\nhteclado - Teclas especificas para cambiar el color del texto de la pantalla\neditordetexto - Editor de texto simple sin funcion de guardar archivo\nmenujuegos - Menu de juegos!\n\n................................................................................\n\n");
+            imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\ncargararchivo - Cargar archivo hola.txt(no funciona muy bien esa funcion)\nexit - Apagar el ordenador\ncalculadora - Calculadora\nguiblanca - Muestra toda la pantalla blanca, presiona ALT para limpiar la pantalla despues de eso\nhola - un hola mundo simple\nguibonita - Muestra un texto con varios colores\nhteclado - Teclas especificas para cambiar el color del texto de la pantalla\neditordetexto - Editor de texto simple sin funcion de guardar archivo\nmenujuegos - Menu de juegos!\nhuguiniosascii - Arte Ascii de HuguiniOS\n\n................................................................................\n\n");
                     imprimir_texto("ordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, "exit", 7) == 0) {
           outw(0x604, 0x2000);
-      } else if(strncmp(comando, "guibonita", 7) == 0) {
+      } else if(strncmp(comando, "huguiniosascii", 10) == 0) {
+          limpiar_pantalla();
+          imprimir_texto("\n _    _                   _       _  ____   _____");
+          imprimir_texto("\n");
+          imprimir_texto("| |  | |                 (_)     (_)/ __ \ / ____|");
+          imprimir_texto("\n");
+          imprimir_texto("| |__| |_   _  __ _ _   _ _ _ __  _| |  | | (___ ");
+          imprimir_texto("\n");
+          imprimir_texto("|  __  | | | |/ _` | | | | | '_ \| | |  | |\___");
+          imprimir_texto("\n");
+          imprimir_texto("| |  | | |_| | (_| | |_| | | | | | | |__| |____) |");
+          imprimir_texto("\n");
+          imprimir_texto("|_|  |_|\__,_|\__, |\__,_|_|_| |_|_|\____/|_____/");
+          imprimir_texto("\n");
+          imprimir_texto("__/");
+          imprimir_texto("\n");
+          imprimir_texto("|___/                               \n\n");
+          imprimir_texto("ordenador:~/HuguiniOS$ ");
+      }
+      else if(strncmp(comando, "guibonita", 7) == 0) {
         iniciar_gui_bonita();
         
       } else if(strncmp(comando, "menujuegos", 7) == 0) {
@@ -317,7 +336,14 @@ uint8_t scan_code = insb(0x60);
           imprimir_texto("\nordenador:~/HuguiniOS$ ");
         }
         imprimir_texto(comando);
-      } else {
+      } 
+      if(menu_juegos == true || tickdown_iniciado == true) {
+        limpiar_pantalla();
+        crear_ventana("JUEGOS", "Bienvenido al menu de los juegos, para salir, presiona ESC\nJuegos disponibles:\ntickdown - pulsa el espacio para incrementar el numero");
+  imprimir_texto("\nIntroduce el nombre del juego que quieras jugar: ");
+      imprimir_texto(comando);
+      }
+      else if(app_editor_de_texto == true) {
         imprimir_texto("EDITOR DE TEXTO\nNO SE VAN A GUARDAR EN NINGUN ARCHIVO EL CONTENIDO, PARA DAR UN SALTO DE LINEA, PRESIONA EL SHIFT DERECHO O ENTER\n\n");
         imprimir_texto(comando);
       }
