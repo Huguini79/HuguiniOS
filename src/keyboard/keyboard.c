@@ -14,7 +14,13 @@
 
 #include <stdbool.h>
 
+void cli() {
+  __asm__("cli");
+}
+
 bool app_editor_de_texto = false;
+
+bool extendida = false;
 
 int contador = 1;
 
@@ -255,7 +261,8 @@ uint8_t scan_code = insb(0x60);
                 imprimir_texto("\nNo se ha podido cargar el archivo hola.txt en la carpeta raíz\n\n");
                 imprimir_texto("ordenador:~/HuguiniOS$ ");
               }
-      } else if(strncmp(comando, "", 7) == 0) {
+      }
+      else if(strncmp(comando, "", 7) == 0) {
           imprimir_texto("\nordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, " ", 7) == 0) {
           imprimir_texto("\nordenador:~/HuguiniOS$ ");
@@ -273,8 +280,9 @@ uint8_t scan_code = insb(0x60);
       }
       else if(strncmp(comando, "help", 7) == 0) {
       limpiar_pantalla();
-          imprimir_texto("\n................................................................................\n");
-            imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\ncargararchivo - Cargar archivo hola.txt(no funciona muy bien esa funcion)\nexit - Apagar el ordenador\ncalculadora - Calculadora\nguiblanca - Muestra toda la pantalla blanca, presiona ALT para limpiar la pantalla despues de eso\nhola - un hola mundo simple\nguibonita - Muestra un texto con varios colores\nhteclado - Teclas especificas para cambiar el color del texto de la pantalla\neditordetexto - Editor de texto simple sin funcion de guardar archivo\nmenujuegos - Menu de juegos!\nhuguiniosascii - Arte Ascii de HuguiniOS\n\n................................................................................\n\n");
+          crear_ventana("                           AYUDA                            ", "");
+            imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\ncargararchivo - Cargar archivo hola.txt(no funciona muy bien esa funcion)\nexit - Apagar el ordenador\ncalculadora - Calculadora\nguiblanca - Muestra toda la pantalla blanca, presiona ALT para limpiar la pantalla despues de eso\nhola - un hola mundo simple\nguibonita - Muestra un texto con varios colores\nhteclado - Teclas especificas para cambiar el color del texto de la pantalla\neditordetexto - Editor de texto simple sin funcion de guardar archivo\nmenujuegos - Menu de juegos!\nhuguiniosascii - Arte Ascii de HuguiniOS\n");
+            crear_ventana("                                                           ", "");
                     imprimir_texto("ordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, "exit", 7) == 0) {
           outw(0x604, 0x2000);

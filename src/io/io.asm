@@ -5,6 +5,15 @@ global insb
 global insw
 global outb
 global outw
+global outl
+global inl
+
+inl:
+    push edx
+    mov dx, [esp + 4]
+    in eax, dx
+    pop edx
+    ret
 
 insb:
     push edx
@@ -37,3 +46,9 @@ outw:
     out dx, ax
     pop edx
     ret
+    
+outl:
+	out dx, eax
+	ret
+	
+

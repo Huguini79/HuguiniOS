@@ -11,6 +11,7 @@
 #include "memory/paging/paging.h"
 #include "fs/pparser.h"
 #include "disk/streamer.h"
+#include "pci/pci.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -180,6 +181,8 @@ void kernel_main() {
     fs_init();
     
     kheap_init();
+    
+    checkAllBuses();
 
     /* outb(0x60, 0xff); */
 		   
