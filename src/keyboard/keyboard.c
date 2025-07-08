@@ -11,6 +11,8 @@
 #include "programs/editordetexto.h"
 #include "games/menu.h"
 #include "games/tickdown.h"
+#include "pci/pci.h"
+#include "graphics/graphics.h"
 
 #include <stdbool.h>
 
@@ -243,7 +245,13 @@ uint8_t scan_code = insb(0x60);
         crear_ventana("               VERSION SISTEMA OPERATIVO                   ", "\n\n\n\n\n\n\n\n\n\nSistema operativo por Huguini79\nDesarrollado desde cero\nY se llama HuguiniOS\n\n\n\n\n\n\n\n\n");
         imprimir_texto("\n\n");
         
-      } else if(strncmp(comando, "clear", 7) == 0) {
+      } else if(strncmp(comando, "carretera", 7) == 0) {
+        limpiar_pantalla();
+        dibujar_sprite(10, 4, "# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #");
+        dibujar_sprite(10, 5, ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .");
+        dibujar_sprite(10, 6, "# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #");
+      }
+      else if(strncmp(comando, "clear", 7) == 0) {
         limpiar_pantalla();
         imprimir_texto("ordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, "sorpresa", 7) == 0) {
@@ -253,12 +261,12 @@ uint8_t scan_code = insb(0x60);
         }
         imprimir_texto("\n\nordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, "cargararchivo", 7) == 0) {
-              int fd = fopen("0:/hola.txt", "r");
+              int fd = fopen("hola.txt", "r");
               if(fd) {
                 imprimir_texto("\nEl archivo hola.txt ha sido cargado exitosamente\n\n");
                 imprimir_texto("ordenador:~/HuguiniOS$ ");
               } else {
-                imprimir_texto("\nNo se ha podido cargar el archivo hola.txt en la carpeta raíz\n\n");
+                imprimir_texto("\nNo se ha podido cargar el archivo hola.txt en la carpeta raiz\n\n");
                 imprimir_texto("ordenador:~/HuguiniOS$ ");
               }
       }
@@ -281,7 +289,7 @@ uint8_t scan_code = insb(0x60);
       else if(strncmp(comando, "help", 7) == 0) {
       limpiar_pantalla();
           crear_ventana("                           AYUDA                            ", "");
-            imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\ncargararchivo - Cargar archivo hola.txt(no funciona muy bien esa funcion)\nexit - Apagar el ordenador\ncalculadora - Calculadora\nguiblanca - Muestra toda la pantalla blanca, presiona ALT para limpiar la pantalla despues de eso\nhola - un hola mundo simple\nguibonita - Muestra un texto con varios colores\nhteclado - Teclas especificas para cambiar el color del texto de la pantalla\neditordetexto - Editor de texto simple sin funcion de guardar archivo\nmenujuegos - Menu de juegos!\nhuguiniosascii - Arte Ascii de HuguiniOS\n");
+            imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\ncargararchivo - Cargar archivo hola.txt(no funciona muy bien esa funcion)\nexit - Apagar el ordenador\ncalculadora - Calculadora\nguiblanca - Muestra toda la pantalla blanca, presiona ALT para limpiar la pantalla despues de eso\nhola - un hola mundo simple\nguibonita - Muestra un texto con varios colores\nhteclado - Teclas especificas para cambiar el color del texto de la pantalla\neditordetexto - Editor de texto simple sin funcion de guardar archivo\nmenujuegos - Menu de juegos!\nhuguiniosascii - Arte Ascii de HuguiniOS\ncarretera - Dibujo de carretera\n");
             crear_ventana("                                                           ", "");
                     imprimir_texto("ordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, "exit", 7) == 0) {

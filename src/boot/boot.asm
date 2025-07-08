@@ -119,5 +119,28 @@ ata_lba_read:
     loop .next_sector
     ret
 
+; FAT16
+OEMIdentifier		db 'HUGUINIOS'
+BytesPerSector		dw 0x200
+SectorsPerCluster	db 0x80
+ReservedSectors		dw 200
+FATCopies		db 0x02
+RootDirEntries		dw 0x40
+NumSectors		dw 0x00
+MediaType		db 0xF8
+SectorsPerFat		dw 0x100
+SectorsperTrack		dw 0x20
+NumberOfHeads		dw 0x40
+HiddenSectors		dd 0x00
+SectorsBig		dd 0x773594
+
+; BPB
+DriveNumber		db 0x80
+WinNTBit		db 0x00
+Signature		db 0x29
+VolumeID		dd 0xD105
+VolumeIDString		db 'HUGUINIOS BOO'
+SystemIDString		db 'FAT16'
+
 times (510 - ($ - $$)) db 0
 dw 0xAA55

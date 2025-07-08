@@ -16,6 +16,7 @@ $(shell mkdir -p $(DIRS))
 
 all: ./bin/boot.bin ./bin/kernel.bin
 	rm -rf ./bin/HuguiniOS.img
+	rm -rf ./bin/HuguiniOS.iso
 	rm -rf ./bin/os.bin
 	dd if=/dev/zero of=./bin/HuguiniOS.img bs=512 count=400
 	dd if=./bin/boot.bin of=./bin/HuguiniOS.img bs=512 count=1 conv=notrunc
@@ -130,5 +131,6 @@ all: ./bin/boot.bin ./bin/kernel.bin
 	rm -rf ./bin/kernel.bin
 	rm -rf ./bin/HuguiniOS.img
 	rm -rf ./bin/os.bin
+	rm -rf ./bin/HuguiniOS.iso
 	rm -rf ${FILES}
 	rm -rf ./build/kernelfull.o
