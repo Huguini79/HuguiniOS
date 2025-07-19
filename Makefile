@@ -1,4 +1,4 @@
-FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt/idt.asm.o ./build/idt/idt.o ./build/memory/memory.o ./build/io/io.asm.o ./build/memory/heap/heap.o ./build/memory/heap/kheap.o ./build/disk/disk.o ./build/string/string.o ./build/memory/paging/paging.o ./build/memory/paging/paging.asm.o ./build/fs/pparser.o ./build/disk/streamer.o ./build/gdt/gdt.o ./build/fs/file.o ./build/fs/fat/fat16.o ./build/loader/formats/elf.o ./build/loader/formats/elfloader.o ./build/programs/calculator.o ./build/programs/hola.o ./build/keyboard/keyboard.o ./build/programs/guibonita.o ./build/programs/editordetexto.o ./build/games/menu.o ./build/games/tickdown.o ./build/graphics/graphics.o ./build/pci/pci.o
+FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt/idt.asm.o ./build/idt/idt.o ./build/memory/memory.o ./build/io/io.asm.o ./build/memory/heap/heap.o ./build/memory/heap/kheap.o ./build/disk/disk.o ./build/string/string.o ./build/memory/paging/paging.o ./build/memory/paging/paging.asm.o ./build/disk/streamer.o ./build/gdt/gdt.o ./build/programs/calculator.o ./build/programs/hola.o ./build/keyboard/keyboard.o ./build/programs/guibonita.o ./build/programs/editordetexto.o ./build/games/menu.o ./build/games/tickdown.o ./build/graphics/graphics.o ./build/pci/pci.o
 
 INCLUDES = -I./src
 
@@ -9,7 +9,7 @@ FLAGS = -g -ffreestanding -fno-pic -fno-pie -no-pie \
         -Wno-unused-parameter -nostdlib -nostartfiles \
         -nodefaultlibs -Wall -Os -Iinc
 
-DIRS = ./build ./bin ./build/io ./build/idt ./build/memory ./build/memory/heap ./build/disk ./build/string ./build/memory/paging ./build/fs ./build/gdt ./build/fs/fat ./build/loader/formats ./build/programs ./build/keyboard ./build/games ./build/graphics ./build/pci
+DIRS = ./build ./bin ./build/io ./build/idt ./build/memory ./build/memory/heap ./build/disk ./build/string ./build/memory/paging./build/gdt./build/programs ./build/keyboard ./build/games ./build/graphics ./build/pci
 
 $(shell mkdir -p $(DIRS))
 
@@ -76,34 +76,17 @@ all: ./bin/boot.bin ./bin/kernel.bin
 ./build/string/string.o: ./src/string/string.c
 	i686-elf-gcc -w $(INCLUDES) -I ./src/string $(FLAGS) -std=gnu99 -c ./src/string/string.c -o ./build/string/string.o
 	
-./build/fs/pparser.o: ./src/fs/pparser.c
-	i686-elf-gcc -w $(INCLUDES) -I./src/fs $(FLAGS) -std=gnu99 -c ./src/fs/pparser.c -o ./build/fs/pparser.o
-	
 ./build/disk/streamer.o: ./src/disk/streamer.c
 	i686-elf-gcc -w $(INCLUDES) -I ./src/disk/ $(FLAGS) -std=gnu99 -c ./src/disk/streamer.c -o ./build/disk/streamer.o
 
 ./build/gdt/gdt.o: ./src/gdt/gdt.c
 	i686-elf-gcc -w $(INCLUDES) -I ./src/gdt/ $(FLAGS) -std=gnu99 -c ./src/gdt/gdt.c -o ./build/gdt/gdt.o
 	
-./build/fs/file.o: ./src/fs/file.c
-	i686-elf-gcc -w $(INCLUDES) -I ./src/fs/ $(FLAGS) -std=gnu99 -c ./src/fs/file.c -o ./build/fs/file.o
-	
-./build/fs/fat/fat16.o: ./src/fs/fat/fat16.c
-	i686-elf-gcc -w $(INCLUDES) -I ./src/fs/fat $(FLAGS) -std=gnu99 -c ./src/fs/fat/fat16.c -o ./build/fs/fat/fat16.o
-	
-./build/loader/formats/elf.o: ./src/loader/formats/elf.c
-	i686-elf-gcc -w $(INCLUDES) -I ./src/loader/formats $(FLAGS) -std=gnu99 -c ./src/loader/formats/elf.c -o ./build/loader/formats/elf.o
-	
-./build/loader/formats/elfloader.o: ./src/loader/formats/elfloader.c
-	i686-elf-gcc -w $(INCLUDES) -I ./src/loader/formats $(FLAGS) -std=gnu99 -c ./src/loader/formats/elfloader.c -o ./build/loader/formats/elfloader.o
-	
-	
 ./build/programs/calculator.o: ./src/programs/calculator.c
 	i686-elf-gcc -w $(INCLUDES) -I ./src/programs/ $(FLAGS) -std=gnu99 -c ./src/programs/calculator.c -o ./build/programs/calculator.o
 	
 ./build/programs/hola.o: ./src/programs/hola.c
 	i686-elf-gcc -w $(INCLUDES) -I./src/programs $(FLAGS) -std=gnu99 -c ./src/programs/hola.c -o ./build/programs/hola.o
-	
 	
 ./build/keyboard/keyboard.o: ./src/keyboard/keyboard.c
 	i686-elf-gcc -w $(INCLUDES) -I./src/keyboard $(FLAGS) -std=gnu99 -c ./src/keyboard/keyboard.c -o ./build/keyboard/keyboard.o

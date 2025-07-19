@@ -1,5 +1,6 @@
 #include "editordetexto.h"
 #include "../kernel.h"
+#include "../huguinimain.h"
 #include "idt/idt.h"
 #include "keyboard/keyboard.h"
 

@@ -2,6 +2,7 @@
 #include "heap.h"
 #include "config.h"
 #include "kernel.h"
+#include "huguinimain.h"
 #include "memory/memory.h"
 
 struct heap kernel_heap;

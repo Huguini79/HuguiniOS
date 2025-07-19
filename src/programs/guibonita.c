@@ -1,4 +1,5 @@
 #include "../kernel.h"
+#include "../huguinimain.h"
 #include "guibonita.h"
 
 void iniciar_gui_bonita() {

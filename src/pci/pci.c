@@ -1,4 +1,5 @@
 #include "../kernel.h"
+#include "../huguinimain.h"
 #include "pci.h"
 #include "keyboard/keyboard.h"
 #include "io/io.h"

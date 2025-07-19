@@ -1,6 +1,7 @@
 #include "calculator.h"
 #include "idt/idt.h"
 #include "../kernel.h"
+#include "../huguinimain.h"
 
 void ensenar() {
   crear_ventana("                   CALCULADORA                              ", "");

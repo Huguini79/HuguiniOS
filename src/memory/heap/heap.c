@@ -1,5 +1,6 @@
 #include "heap.h"
 #include "kernel.h"
+#include "huguinimain.h"
 #include "status.h"
 #include "memory/memory.h"
 #include <stdbool.h>

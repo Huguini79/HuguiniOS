@@ -1,15 +1,14 @@
 #include "kernel.h"
+#include "huguinimain.h"
 #include "idt/idt.h"
 #include "io/io.h"
 #include "config.h"
 #include "gdt/gdt.h"
-#include "fs/file.h"
 #include "memory/heap/kheap.h"
 #include "string/string.h"
 #include "disk/disk.h"
 #include "string/string.h"
 #include "memory/paging/paging.h"
-#include "fs/pparser.h"
 #include "disk/streamer.h"
 #include "pci/pci.h"
 #include <stddef.h>
@@ -177,8 +176,6 @@ void kernel_main() {
 	enable_paging();
 
     enable_interrumpts();
-    
-    fs_init();
     
     kheap_init();
     

@@ -1,4 +1,5 @@
 #include "../kernel.h"
+#include "../huguinimain.h"
 #include "menu.h"
 #include "idt/idt.h"
 #include "keyboard/keyboard.h"

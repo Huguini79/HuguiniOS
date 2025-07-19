@@ -1,9 +1,8 @@
 #include "idt.h"
 #include "config.h"
 #include "../kernel.h"
+#include "../huguinimain.h"
 #include "memory/memory.h"
-#include "fs/pparser.h"
-#include "fs/fat/fat16.h"
 #include "string/string.h"
 #include "keyboard/keyboard.h"
 #include "programs/calculator.h"
@@ -13,7 +12,6 @@
 struct idt_desc idt_descriptors[HUGUINIOS_TOTAL_INTERRUPTS];
 struct idtr_desc idtr_descriptor;
 
-const char mensaje[] = "Tecla del teclado presionada";
 const char mensaje2[] = "Error de división por cero";
 
 void idt_zero();
