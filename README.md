@@ -8,4 +8,4 @@ The bin folder is where the compiled version of the operating system resides(you
 
 I hope you enjoy my operating system and if you want, you can do your own version of HuguiniOS. IT'S OPEN SOURCE!
 
-For anyone who is interested, I learned how to make my operating system using the book Developing a multi-thread kernel from scratch of Daniel McCarthy, he explains very well the process from creating a real mode bootloader to a multi-thread 32 bit kernel in protected mode.
+For anyone who is interested, I learned how to make my own operating system using the book Developing a multi-thread kernel from scratch of Daniel McCarthy, he explains very well the process from creating a real mode bootloader to a multi-thread 32 bit kernel in protected mode.
