@@ -1,4 +1,4 @@
-FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt/idt.asm.o ./build/idt/idt.o ./build/memory/memory.o ./build/io/io.asm.o ./build/memory/heap/heap.o ./build/memory/heap/kheap.o ./build/disk/disk.o ./build/string/string.o ./build/memory/paging/paging.o ./build/memory/paging/paging.asm.o ./build/disk/streamer.o ./build/gdt/gdt.o ./build/programs/calculator.o ./build/programs/hola.o ./build/keyboard/keyboard.o ./build/programs/guibonita.o ./build/programs/editordetexto.o ./build/games/menu.o ./build/games/tickdown.o ./build/graphics/graphics.o ./build/pci/pci.o
+FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt/idt.asm.o ./build/idt/idt.o ./build/memory/memory.o ./build/io/io.asm.o ./build/memory/heap/heap.o ./build/memory/heap/kheap.o ./build/disk/disk.o ./build/string/string.o ./build/memory/paging/paging.o ./build/memory/paging/paging.asm.o ./build/disk/streamer.o ./build/gdt/gdt.o ./build/programs/calculator.o ./build/programs/hola.o ./build/keyboard/keyboard.o ./build/programs/guibonita.o ./build/programs/editordetexto.o ./build/games/menu.o ./build/games/tickdown.o ./build/graphics/graphics.o ./build/pci/pci.o ./build/interpreter/interpreter.o
 
 INCLUDES = -I./src
 
@@ -9,7 +9,7 @@ FLAGS = -g -ffreestanding -fno-pic -fno-pie -no-pie \
         -Wno-unused-parameter -nostdlib -nostartfiles \
         -nodefaultlibs -Wall -Os -Iinc
 
-DIRS = ./build ./bin ./build/io ./build/idt ./build/memory ./build/memory/heap ./build/disk ./build/string ./build/memory/paging./build/gdt./build/programs ./build/keyboard ./build/games ./build/graphics ./build/pci
+DIRS = ./build ./bin ./build/io ./build/idt ./build/memory ./build/memory/heap ./build/disk ./build/string ./build/memory/paging./build/gdt./build/programs ./build/keyboard ./build/games ./build/graphics ./build/pci ./build/interpreter
 
 $(shell mkdir -p $(DIRS))
 
@@ -108,6 +108,9 @@ all: ./bin/boot.bin ./bin/kernel.bin
 	
 ./build/pci/pci.o: ./src/pci/pci.c
 	i686-elf-gcc -w $(INCLUDES) -I./src/pci $(FLAGS) -std=gnu99 -c ./src/pci/pci.c -o ./build/pci/pci.o
+	
+./build/interpreter/interpreter.o: ./src/interpreter/interpreter.c
+	i686-elf-gcc -w $(INCLUDES) -I./src/interpreter $(FLAGS) -std=gnu99 -c ./src/interpreter/interpreter.c -o ./build/interpreter/interpreter.o
 	
  clean:
 	rm -rf ./bin/boot.bin

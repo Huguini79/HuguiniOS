@@ -11,6 +11,7 @@
 #include "games/tickdown.h"
 #include "pci/pci.h"
 #include "graphics/graphics.h"
+#include "interpreter/interpreter.h"
 
 #include <stdbool.h>
 
@@ -21,6 +22,8 @@ void cli() {
 bool app_editor_de_texto = false;
 
 bool extendida = false;
+
+bool interpreter = false;
 
 int contador = 1;
 
@@ -165,6 +168,7 @@ uint8_t scan_code = insb(0x60);
     else if(scan_code == 0x38) {
       app_editor_de_texto = false;
       app_calculadora = false;
+      interpreter = false;
       limpiar_pantalla();
       imprimir_texto("ordenador:~/HuguiniOS$ ");
       
@@ -234,6 +238,19 @@ uint8_t scan_code = insb(0x60);
               limpiar_pantalla();
               imprimir_texto("ordenador:~/HuguiniOS$ ");
           }
+      } else if(interpreter == true) {
+        if(strncmp(comando, "", 7) == 0) {
+          imprimir_texto("\nhuguinilanguage> ");
+        
+        } else if(strncmp(comando, "imprimir", 8) == 0) {
+          interpretar_comando(comando);
+          
+        } else {
+          imprimir_texto("Comando de huguinilanguage no reconocido");
+        }
+        comando[0] = '\0';
+      pos = 0;
+        
       }
       else {
         contador++;
@@ -278,12 +295,20 @@ uint8_t scan_code = insb(0x60);
       else if(strncmp(comando, "help", 7) == 0) {
       limpiar_pantalla();
           crear_ventana("                           AYUDA                            ", "");
-            imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\nexit - Apagar el ordenador\ncalculadora - Calculadora\nguiblanca - Muestra toda la pantalla blanca, presiona ALT para limpiar la pantalla despues de eso\nhola - un hola mundo simple\nguibonita - Muestra un texto con varios colores\nhteclado - Teclas especificas para cambiar el color del texto de la pantalla\neditordetexto - Editor de texto simple sin funcion de guardar archivo\nmenujuegos - Menu de juegos!\nhuguiniosascii - Arte Ascii de HuguiniOS\ncarretera - Dibujo de carretera\n");
+            imprimir_texto("Comandos:\nver - Version del sistema operativo\nclear - Limpiar la pantalla\nsorpresa - Sorpresa\nexit - Apagar el ordenador\ncalculadora - Calculadora\nguiblanca - Muestra toda la pantalla blanca, presiona ALT para limpiar la pantalla despues de eso\nhola - un hola mundo simple\nguibonita - Muestra un texto con varios colores\nhteclado - Teclas especificas para cambiar el color del texto de la pantalla\neditordetexto - Editor de texto simple sin funcion de guardar archivo\nmenujuegos - Menu de juegos!\nhuguiniosascii - Arte Ascii de HuguiniOS\ncarretera - Dibujo de carretera\nhuguinilanguage - Interpreter de comandos de HuguiniLanguage");
             crear_ventana("                                                           ", "");
                     imprimir_texto("ordenador:~/HuguiniOS$ ");
       } else if(strncmp(comando, "exit", 7) == 0) {
-          outw(0x604, 0x2000);
-      } else if(strncmp(comando, "huguiniosascii", 10) == 0) {
+          outw(0x604, 0x2000);comando[0] = '\0';
+      pos = 0;
+          
+      } else if(strncmp(comando, "huguinilanguage", 15) == 0) {
+          interpreter = true;
+          limpiar_pantalla();
+          crear_ventana("HUGUINILANGUAGE", "Comandos:\nimprimir - Imprime el texto que se le pone al lado\nALT - Salir del interprete de comandos de HuguiniLanguage");
+          imprimir_texto("\n\nhuguinilanguage> ");
+      }
+      else if(strncmp(comando, "huguiniosascii", 10) == 0) {
           limpiar_pantalla();
           imprimir_texto("\n _    _                   _       _  ____   _____");
           imprimir_texto("\n");
@@ -352,7 +377,13 @@ uint8_t scan_code = insb(0x60);
         imprimir_texto("EDITOR DE TEXTO\nNO SE VAN A GUARDAR EN NINGUN ARCHIVO EL CONTENIDO, PARA DAR UN SALTO DE LINEA, PRESIONA EL SHIFT DERECHO O ENTER\n\n");
         imprimir_texto(comando);
       }
-      
+      if(interpreter == true) {
+        limpiar_pantalla();
+        for(int ii = 0; ii < contador; ii++) {
+          imprimir_texto("\nhuguinilanguage> ");
+        }
+        imprimir_texto(comando);
+      }
     }
     	outb(0x20, 0x20);
 }
