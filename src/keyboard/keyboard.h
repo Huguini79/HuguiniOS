@@ -6,6 +6,6 @@ void iniciar_teclado();
 void cli();
 
 extern bool app_editor_de_texto;
-int contador;
+extern int contador;
 
 #endif

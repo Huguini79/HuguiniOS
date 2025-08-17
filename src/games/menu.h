@@ -4,6 +4,6 @@
 
 void iniciar_menu();
 
-bool menu_juegos;
+extern bool menu_juegos;
 
 #endif

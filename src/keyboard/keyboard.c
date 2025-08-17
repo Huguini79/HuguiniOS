@@ -19,22 +19,33 @@ void cli() {
   __asm__("cli");
 }
 
-bool app_editor_de_texto = false;
+void strtrim(char *str) {
+    int i = strlen(str) - 1;
+    while (i >= 0 && (str[i] == ' ' || str[i] == '\n' || str[i] == '\r')) {
+        str[i] = '\0';
+        i--;
+    }
+}
 
-bool extendida = false;
+bool app_calculadora;
 
-bool interpreter = false;
+extern bool app_editor_de_texto = false;
 
-int contador = 1;
+extern bool extendida = false;
 
-int pos;
+extern bool interpreter = false;
 
-char comando[100];
+extern int contador = 1;
 
-int num1;
-int num2;
+extern int pos;
+
+extern char comando[100];
+
+extern int num1;
+extern int num2;
 
 void iniciar_teclado() {
+menu_juegos = false;
 uint8_t scan_code = insb(0x60);
     (void)scan_code;
     if(scan_code == 0x1E) {
@@ -222,36 +233,43 @@ uint8_t scan_code = insb(0x60);
     }
     else if(scan_code == 0x1C) {
       contador = 1;
-      if(app_editor_de_texto == true) {
+    if(app_editor_de_texto == true) {
         agregar_caracter('\n');
         imprimir_texto("\n");
-      } else if(menu_juegos == true || tickdown_iniciado == true) {
-          if (strncmp(comando, "tickdown", 8) == 0) {
-              iniciar_tickdown();
-          } else if (strncmp(comando, "exit", 4) == 0) {
-              menu_juegos = false;
-              tickdown_iniciado = false;
-              limpiar_pantalla();
-              imprimir_texto("ordenador:~/HuguiniOS$ ");
-          } else {
-              imprimir_texto("\nJuego no reconocido\n");
-              limpiar_pantalla();
-              imprimir_texto("ordenador:~/HuguiniOS$ ");
-          }
-      } else if(interpreter == true) {
-        if(strncmp(comando, "", 7) == 0) {
-          imprimir_texto("\nhuguinilanguage> ");
-        
-        } else if(strncmp(comando, "imprimir", 8) == 0) {
-          interpretar_comando(comando);
-          
-        } else {
-          imprimir_texto("Comando de huguinilanguage no reconocido");
+    } 
+    
+    else if(menu_juegos == true || tickdown_iniciado == true) {
+    // Elimina espacios y saltos de línea del comando antes de comparar
+    char comando_limpio[100];
+    strcpy(comando_limpio, comando);
+    strtrim(comando_limpio);  // Necesitarás implementar esta función para eliminar espacios y \n
+
+    if (strncmp(comando_limpio, "tickdown", 8) == 0) {
+        iniciar_tickdown();
+    } else if (strncmp(comando_limpio, "exit", 4) == 0) {
+        menu_juegos = false;
+        tickdown_iniciado = false;
+        limpiar_pantalla();
+        imprimir_texto("ordenador:~/HuguiniOS$ ");
+    } else {
+        imprimir_texto("\nJuego no reconocido. Opciones válidas: tickdown, exit\n");
+        imprimir_texto("Introduce el nombre del juego que quieras jugar: ");
+    }
+    comando[0] = '\0';
+    pos = 0;
+}
+    else if(interpreter == true) {
+        if(strlen(comando) > 0) {  // Solo procesar si hay comando
+            if(strncmp(comando, "imprimir", 8) == 0) {
+                interpretar_comando(comando);
+            } else {
+                imprimir_texto("\nComando de huguinilanguage no reconocido");
+            }
         }
+        imprimir_texto("\nhuguinilanguage> ");
         comando[0] = '\0';
-      pos = 0;
-        
-      }
+        pos = 0;
+    }
       else {
         contador++;
       app_editor_de_texto = false;
@@ -308,6 +326,9 @@ uint8_t scan_code = insb(0x60);
           crear_ventana("HUGUINILANGUAGE", "Comandos:\nimprimir - Imprime el texto que se le pone al lado\nALT - Salir del interprete de comandos de HuguiniLanguage");
           imprimir_texto("\n\nhuguinilanguage> ");
       }
+      else if(strncmp(comando, "tickdown", 8) == 0) {
+      		iniciar_tickdown();
+      }
       else if(strncmp(comando, "huguiniosascii", 10) == 0) {
           limpiar_pantalla();
           imprimir_texto("\n _    _                   _       _  ____   _____");
@@ -331,6 +352,7 @@ uint8_t scan_code = insb(0x60);
         iniciar_gui_bonita();
         
       } else if(strncmp(comando, "menujuegos", 7) == 0) {
+      	menu_juegos = true;
         iniciar_menu();
       }
       else if(strncmp(comando, "editordetexto", 7) == 0) {

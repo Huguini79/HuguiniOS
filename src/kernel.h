@@ -7,6 +7,6 @@
 
 #define HUGUINIOS_MAX_PATH 108
 
-int color_terminal;
+extern int color_terminal;
 
 #endif

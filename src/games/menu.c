@@ -8,6 +8,8 @@
 
 #include <stdbool.h>
 
+  bool menu_juegos;
+
 void iniciar_menu() {
   menu_juegos = true;
   limpiar_pantalla();

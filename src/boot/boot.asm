@@ -1,6 +1,27 @@
 ORG 0x7c00
 BITS 16
 
+OEMLabel		db "HELLOBOOT "	; Disk label
+BytesPerSector		dw 512		; Bytes per sector
+SectorsPerCluster	db 1		; Sectors per cluster
+ReservedForBoot		dw 1		; Reserved sectors for boot record
+NumberOfFats		db 2		; Number of copies of the FAT
+RootDirEntries		dw 224		; Number of entries in root dir
+					; (224 * 32 = 7168 = 14 sectors to read)
+LogicalSectors		dw 2880		; Number of logical sectors
+MediumByte		db 0F0h		; Medium descriptor byte
+SectorsPerFat		dw 9		; Sectors per FAT
+SectorsPerTrack		dw 18		; Sectors per track (36/cylinder)
+Sides			dw 2		; Number of sides/heads
+HiddenSectors		dd 0		; Number of hidden sectors
+LargeSectors		dd 0		; Number of LBA sectors
+DriveNo			dw 0		; Drive No: 0
+Signature		db 41		; Drive signature: 41 for floppy
+VolumeID		dd 00000000h	; Volume ID: any number
+VolumeLabel		db "HUGUINIOS     "; Volume Label: any 11 chars
+FileSystem		db "FAT12   "	; File system type: don't change!
+
+
 CODE_SEG equ gdt_code - gdt_start
 DATA_SEG equ gdt_data - gdt_start
 
@@ -118,29 +139,6 @@ ata_lba_read:
     pop ecx
     loop .next_sector
     ret
-
-; FAT16
-OEMIdentifier		db 'HUGUINIOS'
-BytesPerSector		dw 0x200
-SectorsPerCluster	db 0x80
-ReservedSectors		dw 200
-FATCopies		db 0x02
-RootDirEntries		dw 0x40
-NumSectors		dw 0x00
-MediaType		db 0xF8
-SectorsPerFat		dw 0x100
-SectorsperTrack		dw 0x20
-NumberOfHeads		dw 0x40
-HiddenSectors		dd 0x00
-SectorsBig		dd 0x773594
-
-; BPB
-DriveNumber		db 0x80
-WinNTBit		db 0x00
-Signature		db 0x29
-VolumeID		dd 0xD105
-VolumeIDString		db 'HUGUINIOS BOO'
-SystemIDString		db 'FAT16'
 
 times (510 - ($ - $$)) db 0
 dw 0xAA55

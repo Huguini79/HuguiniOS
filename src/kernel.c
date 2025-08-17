@@ -76,7 +76,7 @@ void terminal_initialize()
     }   
 }
 
-color_terminal = 15;
+int color_terminal = 15;
 
 void imprimir_texto(const char* str) {
     size_t len = strlen(str);

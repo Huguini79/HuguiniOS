@@ -5,7 +5,7 @@
 void iniciar_tickdown();
 void incrementar_numero();
 
-bool tickdown_iniciado;
-int tickdown_contador;
+extern bool tickdown_iniciado;
+extern int tickdown_contador;
 
 #endif

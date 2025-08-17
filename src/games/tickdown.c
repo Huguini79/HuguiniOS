@@ -8,7 +8,9 @@
 
 #include <stdbool.h>
 
-tickdown_contador = 0;
+bool tickdown_iniciado = false;
+int tickdown_contador = 0;
+
 
 void incrementar_numero() {
   tickdown_contador++;

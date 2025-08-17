@@ -2,7 +2,7 @@
 
 #include <stdbool.h>
 
-bool app_calculadora;
+extern bool app_calculadora;
 
 void ensenar();
 
